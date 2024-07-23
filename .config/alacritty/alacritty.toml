@@ -1,0 +1,58 @@
+live_config_reload = true
+working_directory = "None"
+
+# Themes --
+import = [ 
+  # -- Themes --
+  #"~/.config/alacritty/catppuccin-macchiato.toml", 
+  #"~/.config/alacritty/catppuccin-mocha.toml",
+  "~/.config/alacritty/tokyo-night.toml",
+  #"~/.config/alacritty/tokyo-night-storm.toml",
+  #"~/.config/alacritty/nordic.toml", 
+  # "~/.config/alacritty/xcad.toml",
+  # "~/.config/alacritty/dracula.toml",
+  #"~/.config/alacritty/catppuccin-macchiato.toml",
+  # "~/.config/alacritty/solarized_dark.toml",
+  # "~/.config/alacritty/solarized-osaka.toml",
+]
+
+[window]
+title = "Alacritty"
+blur = true
+opacity = 0.75
+padding.x = 10
+padding.y = 10
+
+[window.dimensions]
+columns = 120
+lines = 30
+
+[cursor.style]
+shape= "Beam"
+blinking = "Never"
+
+[colors]
+#transparent_background_colors = true
+draw_bold_text_with_bright_colors = true
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+#glyph_offset = { x = 1, y = 0 }
+normal.family = "CaskaydiaCove Nerd Font Mono"
+normal.style = "Regular"
+size = 12.0
+
+[font.bold]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Bold"
+
+[font.italic]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Italic"
+
+[keyboard]
+bindings = [
+{ key = "n", mods = "Control", action = "CreateNewWindow" },
+]
