@@ -1,4 +1,4 @@
-function tree --description 'alias tree=tree -CAhF --dirsfirsta'
- command tree -CAhF --dirsfirsta $argv
+function tree --description 'alias tree=tree -CAhF --dirsfirst'
+ command tree -CAhF --dirsfirst $argv
         
 end
