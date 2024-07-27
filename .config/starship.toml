@@ -2,6 +2,7 @@ format = """
 [](#3B4252)\
 $python\
 $username\
+$hostname\
 [](bg:#434C5E fg:#3B4252)\
 $directory\
 [](fg:#434C5E bg:#4C566A)\
@@ -34,6 +35,13 @@ show_always = true
 style_user = "bg:#3B4252"
 style_root = "bg:#3B4252"
 format = '[$user ]($style)'
+
+[hostname]
+ssh_only = true
+ssh_symbol = '🌐'
+style = "bg:#3B4252"
+format = "[@ $hostname]($style)"
+disabled = false
 
 [directory]
 style = "bg:#434C5E"
