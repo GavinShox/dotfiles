@@ -40,7 +40,7 @@ format = '[$user ]($style)'
 ssh_only = true
 ssh_symbol = '🌐'
 style = "bg:#3B4252"
-format = "[@ $hostname]($style)"
+format = "[$ssh_symbol $hostname]($style)"
 disabled = false
 
 [directory]
