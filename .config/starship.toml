@@ -1,8 +1,8 @@
 format = """
 [](#3B4252)\
 $python\
-$username\
 $hostname\
+$username\
 [](bg:#434C5E fg:#3B4252)\
 $directory\
 [](fg:#434C5E bg:#4C566A)\
