@@ -1,4 +1,4 @@
-function diskspace --wraps='du -S | sort -n -r |more' --description 'alias diskspace=du -S | sort -n -r |more'
-  du -S | sort -n -r |more $argv
+function diskspace --wraps='du -S -h | sort -h -r |more' --description 'alias diskspace=du -S -h | sort -h -r |more'
+  du -S -h | sort -h -r |more $argv
         
 end
