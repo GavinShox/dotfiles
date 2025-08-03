@@ -1,3 +1,6 @@
 {
+    "*.conf": {
+        "filetype": "ini"
+    },
     "colorscheme": "catppuccin-mocha-transparent"
 }
