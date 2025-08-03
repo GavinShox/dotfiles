@@ -5,8 +5,8 @@ working_directory = "None"
 import = [ 
   # -- Themes --
   #"~/.config/alacritty/catppuccin-macchiato.toml", 
-  #"~/.config/alacritty/catppuccin-mocha.toml",
-  "~/.config/alacritty/tokyo-night.toml",
+  "~/.config/alacritty/catppuccin-mocha.toml",
+  #"~/.config/alacritty/tokyo-night.toml",
   #"~/.config/alacritty/tokyo-night-storm.toml",
   #"~/.config/alacritty/nordic.toml", 
   # "~/.config/alacritty/xcad.toml",
@@ -52,7 +52,7 @@ style = "Bold"
 family = "CaskaydiaCove Nerd Font Mono"
 style = "Italic"
 
-[keyboard]
-bindings = [
-{ key = "n", mods = "Control", action = "CreateNewWindow" },
-]
+#[keyboard]
+#bindings = [
+#{ key = "n", mods = "Control", action = "CreateNewWindow" },
+#]
