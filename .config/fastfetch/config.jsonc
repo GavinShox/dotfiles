@@ -59,6 +59,10 @@
             "key": "  "
         },
         {
+        	"type": "packages",
+        	"key": "  "
+        },
+        {
             "type": "custom",
             "format": "|──────────────\u001b[1mUptime / Age\u001b[0m──────────────────|"
         },
