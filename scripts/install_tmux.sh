@@ -1,8 +1,9 @@
 #!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 sudo dnf install --refresh -y tmux
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-cp -fb ../.tmux.conf $HOME/.tmux.conf
+cp -fb $SCRIPT_DIR/../.tmux.conf $HOME/.tmux.conf
 # launch tmux server to reload conf
 tmux new -d
 tmux source ~/.tmux.conf
