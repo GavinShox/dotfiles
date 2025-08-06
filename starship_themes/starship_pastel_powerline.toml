@@ -44,7 +44,7 @@ disabled = false
 ssh_only = true
 ssh_symbol = '🌐'
 style = "bg:red fg:crust"
-format = "[ $ssh_symbol$hostname -> ]($style)"
+format = "[ $ssh_symbol$hostname ]($style)"
 disabled = false
 
 # An alternative to the username module which displays a symbol that
