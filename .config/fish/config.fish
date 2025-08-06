@@ -1,6 +1,7 @@
 bind \cf zi # bind control + f to zi (zoxide)
 
-export "MICRO_TRUECOLOR=1"
+set -gx EDITOR micro
+set -gx MICRO_TRUECOLOR 1
 
 starship init fish | source
 fzf --fish | source
