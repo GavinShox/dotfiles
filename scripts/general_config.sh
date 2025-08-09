@@ -4,7 +4,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config"
 DOTFILE_CONFIG_DIR="$SCRIPT_DIR/../.config"
 
-read -r -p "⚠️  This will overwrite existing config files. Backups will be made. Continue? (y/n): " input
+read -r -p "Warning: This will overwrite existing config files. Backups will be made. Continue? (y/n): " input
 if [[ $input == "Y" || $input == "y" ]]; then
 	for dir in "$DOTFILE_CONFIG_DIR"/*; do
 		# only process on directories
