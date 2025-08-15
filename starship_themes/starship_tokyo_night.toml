@@ -51,9 +51,9 @@ format = '[ $user]($style)'
 
 [hostname]
 ssh_only = true
-ssh_symbol = '🌐'
+ssh_symbol = '󰿂 '
 style = "bg:#a3aed2 fg:#090c0c"
-format = "[ $ssh_symbol$hostname ]($style)"
+format = "[ $ssh_symbol $hostname ]($style)"
 disabled = false
 
 [directory]
