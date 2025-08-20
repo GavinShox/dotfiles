@@ -18,12 +18,14 @@ config.window_padding = {
 config.max_fps = 240
 config.animation_fps = 240
 config.color_scheme = 'Catppuccin Mocha'
-config.font_size = 12.25
+config.font_size = 12
 config.bold_brightens_ansi_colors = 'BrightAndBold'
---config.font = wezterm.font('CaskaydiaCove Nerd Font Mono')
+-- config.font = wezterm.font('Monaspace Neon', { weight = 'Medium' })
+-- config.harfbuzz_features={ 'calt', 'liga', 'dlig', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss07', 'ss08', 'ss09' }
 config.font = wezterm.font('CaskaydiaCove Nerd Font Mono', { weight = 'Medium' })
 config.line_height = 1.0
-config.freetype_load_flags = "DEFAULT"
+config.freetype_load_flags = 'DEFAULT'
+config.freetype_load_target = 'Light'
 config.window_background_opacity = 0.75
 config.kde_window_background_blur = true
 config.default_cursor_style = 'SteadyBar'
@@ -36,7 +38,8 @@ config.tab_and_split_indices_are_zero_based = false
 -- tab bar stuff
 local current_theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
 config.window_frame = {
-	font = wezterm.font { family = 'CaskaydiaCove Nerd Font', weight = 'Bold' },
+	-- font = wezterm.font { family = 'Monaspace Neon', weight = 'Bold' },
+	font = wezterm.font { family = 'CaskaydiaCove Nerd Font Mono', weight = 'Bold' },
 	font_size = 12.0,
 	-- inactive_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
 	-- active_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
