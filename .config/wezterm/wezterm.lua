@@ -15,13 +15,15 @@ config.window_padding = {
 	top = 15,
 	bottom = 15,
 }
-config.max_fps = 144
-config.animation_fps = 144
+config.max_fps = 240
+config.animation_fps = 240
 config.color_scheme = 'Catppuccin Mocha'
-config.font_size = 12
-config.font = wezterm.font 'CaskaydiaCove Nerd Font Mono'
---config.font = wezterm.font('CaskaydiaCove Nerd Font Mono', { weight = 'Bold' })
---config.line_height = 1.5
+config.font_size = 12.25
+config.bold_brightens_ansi_colors = 'BrightAndBold'
+--config.font = wezterm.font('CaskaydiaCove Nerd Font Mono')
+config.font = wezterm.font('CaskaydiaCove Nerd Font Mono', { weight = 'Medium' })
+config.line_height = 1.0
+freetype_load_flags = "DEFAULT"
 config.window_background_opacity = 0.75
 config.kde_window_background_blur = true
 config.default_cursor_style = 'SteadyBar'
