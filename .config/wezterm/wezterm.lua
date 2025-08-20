@@ -38,8 +38,10 @@ local current_theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
 config.window_frame = {
 	font = wezterm.font { family = 'CaskaydiaCove Nerd Font', weight = 'Bold' },
 	font_size = 12.0,
-	inactive_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
-	active_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
+	-- inactive_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
+	-- active_titlebar_bg = 'rgba(30, 30, 46, 0.25)',
+	inactive_titlebar_bg = 'none',
+	active_titlebar_bg = 'none',
 }
 config.colors = {
 	tab_bar = {
