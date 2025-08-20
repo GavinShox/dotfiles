@@ -23,7 +23,7 @@ config.bold_brightens_ansi_colors = 'BrightAndBold'
 --config.font = wezterm.font('CaskaydiaCove Nerd Font Mono')
 config.font = wezterm.font('CaskaydiaCove Nerd Font Mono', { weight = 'Medium' })
 config.line_height = 1.0
-freetype_load_flags = "DEFAULT"
+config.freetype_load_flags = "DEFAULT"
 config.window_background_opacity = 0.75
 config.kde_window_background_blur = true
 config.default_cursor_style = 'SteadyBar'
