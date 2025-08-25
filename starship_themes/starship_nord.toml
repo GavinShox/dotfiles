@@ -35,7 +35,7 @@ command_timeout = 5000
 show_always = true
 style_user = "bg:#3B4252"
 style_root = "bg:#3B4252"
-format = '[$user ]($style)'
+format = '[ $user]($style)'
 
 [hostname]
 ssh_only = true

@@ -38,19 +38,19 @@ $time\
 show_always = true
 style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
-format = '[$user ]($style)'
+format = '[ $user]($style)'
 disabled = false
 
 [hostname]
 ssh_only = true
 ssh_symbol = '󰿂 '
-style = "bg:red fg:crust"
+style = "bg:#9A348E"
 format = "[ $ssh_symbol $hostname ]($style)"
 disabled = false
 
 [container]
 symbol = ''
-style = "bg:red fg:crust"
+style = "bg:#9A348E"
 format = '[\[$symbol$name\] ]($style)'
 disabled = false
 
