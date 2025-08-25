@@ -4,6 +4,7 @@ format = """
 [ ](red)\
 $os\
 $hostname\
+$container\
 $username\
 [](bg:peach fg:red)\
 $directory\
@@ -65,6 +66,12 @@ ssh_only = true
 ssh_symbol = '󰿂 '
 style = "bg:red fg:crust"
 format = "[ $ssh_symbol $hostname ]($style)"
+disabled = false
+
+[container]
+symbol = ''
+style = "bg:red fg:crust"
+format = '[\[$symbol$name\] ]($style)'
 disabled = false
 
 [directory]
