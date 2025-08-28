@@ -10,10 +10,15 @@ $directory\
 $git_branch\
 $git_status\
 [](fg:#394260 bg:#212736)\
-$nodejs\
-$rust\
+$c\
 $golang\
+$haskell\
+$java\
+$kotlin\
+$nodejs\
 $php\
+$python\
+$rust\
 [](fg:#212736 bg:#1d2230)\
 $time\
 [ ](fg:#1d2230)\
@@ -103,6 +108,31 @@ format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 symbol = ""
 style = "bg:#212736"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[c]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[java]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[python]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version)(\(#$virtualenv\)) ](fg:#769ff0 bg:#212736)]($style)'
 
 [time]
 disabled = false

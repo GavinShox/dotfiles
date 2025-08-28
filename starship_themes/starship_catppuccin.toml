@@ -13,14 +13,14 @@ $git_branch\
 $git_status\
 [](fg:yellow bg:green)\
 $c\
-$rust\
 $golang\
-$nodejs\
-$php\
+$haskell\
 $java\
 $kotlin\
-$haskell\
+$nodejs\
+$php\
 $python\
+$rust\
 [](fg:green bg:lavender)\
 $time\
 [ ](fg:lavender)\
@@ -102,7 +102,7 @@ style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 
 [c]
-symbol = " "
+symbol = ""
 style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 
@@ -122,7 +122,7 @@ style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 
 [java]
-symbol = " "
+symbol = ""
 style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 

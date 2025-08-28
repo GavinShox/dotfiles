@@ -18,8 +18,11 @@ $gradle\
 $haskell\
 $java\
 $julia\
+$kotlin\
 $nodejs\
 $nim\
+$php\
+$python\
 $rust\
 $scala\
 [](fg:#86BBD8 bg:#06969A)\
@@ -80,22 +83,22 @@ truncation_symbol = "…/"
 # "Important 󰈙 " = " 󰈙 "
 
 [c]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [docker_context]
-symbol = " "
+symbol = ""
 style = "bg:#06969A"
 format = '[ $symbol $context ]($style)'
 
 [elixir]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [elm]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
@@ -109,7 +112,7 @@ style = "bg:#FCA17D"
 format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
@@ -118,17 +121,22 @@ style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [haskell]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [java]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [julia]
-symbol = " "
+symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[kotlin]
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
@@ -142,13 +150,23 @@ symbol = "󰆥 "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
+[php]
+symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version)(\(#$virtualenv\)) ]($style)'
+
 [rust]
 symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [scala]
-symbol = " "
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 

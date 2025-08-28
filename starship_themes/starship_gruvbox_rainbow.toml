@@ -13,14 +13,14 @@ $git_branch\
 $git_status\
 [](fg:color_aqua bg:color_blue)\
 $c\
-$rust\
 $golang\
-$nodejs\
-$php\
+$haskell\
 $java\
 $kotlin\
-$haskell\
+$nodejs\
+$php\
 $python\
+$rust\
 [](fg:color_blue bg:color_bg3)\
 $docker_context\
 $conda\
@@ -117,7 +117,7 @@ style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [c]
-symbol = " "
+symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
@@ -154,7 +154,7 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 [python]
 symbol = ""
 style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [docker_context]
 symbol = ""
