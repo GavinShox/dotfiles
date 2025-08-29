@@ -65,7 +65,7 @@ for dirname in "${selected[@]}"; do
     if [[ "$backup" == true ]]; then
     	echo
         echo "Backing up $dirname config..."
-        "$SCRIPT_DIR"/backup_dir.sh "$target_dir"
+        "$SCRIPT_DIR"/util/backup_dir.sh "$target_dir"
     fi
 
     echo "Applying $dirname config..."

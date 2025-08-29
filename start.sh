@@ -2,8 +2,8 @@
 
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts"
 
-# filenames to exclude - these are util scripts not for users
-EXCLUDE=("backup_dir.sh" "backup_file.sh")
+# file/dir names to exclude - these are util scripts not for users
+EXCLUDE=("util")
 
 # one for full paths (for execution), one for basenames (for display)
 FULL_PATHS=()
