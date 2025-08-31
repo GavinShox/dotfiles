@@ -1,4 +1,4 @@
-function edit --wraps=micro --description 'alias edit=micro'
-  micro $argv
+function edit --wraps=$EDITOR --description 'alias edit=$EDITOR'
+  $EDITOR $argv
         
 end
