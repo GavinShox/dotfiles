@@ -1,0 +1,31 @@
+
+
+new_tab ssh:server
+layout fat
+cd ~
+title fish ssh
+launch --env "KITTY_WINDOW_ID=1" echo 'add ssh command here'
+focus
+
+
+new_tab ubuntu-box
+layout fat
+cd ~/distrobox/ubuntu
+title distrobox
+launch --env "KITTY_WINDOW_ID=2" /usr/bin/sh /usr/bin/distrobox enter ubuntu-box
+focus
+
+
+new_tab arch-box
+layout fat
+cd ~/distrobox/arch
+title distrobox
+launch --env "KITTY_WINDOW_ID=5" /usr/bin/sh /usr/bin/distrobox enter arch-box
+focus
+
+
+new_tab
+layout fat
+cd ~
+launch --env "KITTY_WINDOW_ID=11"
+focus
