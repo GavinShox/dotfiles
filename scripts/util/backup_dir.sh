@@ -9,4 +9,6 @@ if [[ -d $1 ]]; then
 	backup_dir=$1.bak$i
 	cp -r $1 $backup_dir
 	echo "Backup of directory ${1} made at ${backup_dir}"
+else
+	echo "Directory ($1) doesn't exist, nothing to backup"
 fi
