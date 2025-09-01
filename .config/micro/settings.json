@@ -2,5 +2,7 @@
     "*.conf": {
         "filetype": "ini"
     },
-    "colorscheme": "catppuccin-mocha-transparent"
+    "colorscheme": "catppuccin-mocha-transparent",
+    "softwrap": true,
+    "wordwrap": true
 }
