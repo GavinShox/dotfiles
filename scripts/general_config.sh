@@ -43,8 +43,8 @@ for hconf in "$DOTFILE_TOP_LEVEL_DIR"/* "$DOTFILE_TOP_LEVEL_DIR"/.*; do
 	[ -e "$hconf" ] || continue
 	base=$(basename "$hconf")
 
-	# skip . and .. relative dirs
-	[[ "$base" == "." || "$base" == ".." ]] && continue
+	# skip . and .. relative dirs, and the .config dir
+	[[ "$base" == "." || "$base" == ".." || "$base" == ".config" ]] && continue
 
 	# prefix with hconfig
 	configs+=("hconfig:$base")
@@ -53,7 +53,10 @@ done
 # show numbered list
 echo "Available configs:"
 for i in "${!configs[@]}"; do
-    printf "%2d) %s\n" "$((i+1))" "${configs[$i]}"
+	# remove prefix to display to user
+    sel="${configs[$i]}"
+    name="${sel#*:}"
+    printf "%2d) %s\n" "$((i+1))" "$name"
 done
 
 # ask user for selection(s)
