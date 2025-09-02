@@ -4,9 +4,12 @@
 # (tmux for example has a separate script as it isn't as simple as copying files)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config"
-DOTFILE_CONFIG_DIR="$SCRIPT_DIR/../.config"
+# dotfiles meant to go in ~
+DOTFILE_TOP_LEVEL_DIR="$SCRIPT_DIR/../configs"
+# dotfiles meant to go in ~/.config
+DOTFILE_CONFIG_DIR="$DOTFILE_TOP_LEVEL_DIR/.config"
 
-echo "-------------------------------- My dotfile script --------------------------------"
+echo "-------------------------------- Apply Dotfiles --------------------------------"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
 	echo "Stopping script"
@@ -18,15 +21,33 @@ while true; do
     case "$backup_input" in
         [Yy]) backup=true; break ;;
         [Nn]) backup=false; break ;;
-        *) echo "Please answer y or n." ;;
+        *) echo "Please answer yes (y) or no (n)." ;;
     esac
 done
 
-# build array of configs
+# build array of configs to go in ~/.config
 configs=()
-for dir in "$DOTFILE_CONFIG_DIR"/*; do
-    [ -d "$dir" ] || continue
-    configs+=("$(basename "$dir")")
+for conf in "$DOTFILE_CONFIG_DIR"/* "$DOTFILE_CONFIG_DIR"/.*; do
+    [ -e "$conf" ] || continue
+    base=$(basename "$conf")
+
+    # skip . and .. relative dirs
+    [[ "$base" == "." || "$base" == ".." ]] && continue
+
+	# prefix with config
+	configs+=("config:$base")
+done
+
+# and configs that will go directly into the home directory
+for hconf in "$DOTFILE_TOP_LEVEL_DIR"/* "$DOTFILE_TOP_LEVEL_DIR"/.*; do
+	[ -e "$hconf" ] || continue
+	base=$(basename "$hconf")
+
+	# skip . and .. relative dirs
+	[[ "$base" == "." || "$base" == ".." ]] && continue
+
+	# prefix with hconfig
+	configs+=("hconfig:$base")
 done
 
 # show numbered list
@@ -58,22 +79,48 @@ if [[ ${#selected[@]} -eq 0 ]]; then
     exit 1
 fi
 
-for dirname in "${selected[@]}"; do
-    dir="$DOTFILE_CONFIG_DIR/$dirname"
-    target_dir="$CONFIG_DIR/$dirname"
+for sel in "${selected[@]}"; do
+	# separate prefix that was applied above from the config name
+	kind="${sel%%:*}"
+	name="${sel#*:}"
 
-    if [[ "$backup" == true ]]; then
-    	echo
-        echo "Backing up $dirname config..."
-        "$SCRIPT_DIR"/util/backup_dir.sh "$target_dir"
-    fi
+	# configs to go into ~/.config
+	if [[ "$kind" == "config" ]]; then
+		src_conf="$DOTFILE_CONFIG_DIR/$name"
+	    target_conf="$CONFIG_DIR/$name"
+	# configs to go into ~
+	elif [[ "$kind" == "hconfig" ]]; then
+		src_conf="$DOTFILE_TOP_LEVEL_DIR/$name"
+		target_conf="$HOME/$name"
+	else
+		echo "Error: Unkown kind of config ($kind). Exiting..."
+		exit 1
+	fi
 
-    echo "Applying $dirname config..."
-    mkdir -p "$target_dir"
-    # this overlays files
-    cp -rf "$dir"/* "$target_dir"
-    # this replaces whole directory
-    #rsync -a --delete "$dir"/ "$target_dir"/
+	# handle config directory
+	if [[ -d "$src_conf" ]]; then
+		if [[ "$backup" == true ]]; then
+	    	echo
+	        echo "Backing up $name config..."
+	        "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
+		fi
+		
+	    echo "Applying $name config..."
+	    mkdir -p "$target_conf"
+		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program e.g. two incompatible addons
+	    #cp -rf "$src_conf"/* "$target_conf"
+	    rsync -a "$src_conf"/ "$target_conf"/
+	# handle config file
+	elif [[ -f "$src_conf" ]]; then
+		if [[ "$backup" == true ]]; then
+	    	echo
+	        echo "Backing up $name config..."
+	        "$SCRIPT_DIR"/util/backup_file.sh "$target_conf"
+		fi
+
+		echo "Applying $name config..."
+		cp -f "$src_conf" "$target_conf"
+	fi
 done
 
 echo "-------------------------------- Configs applied! --------------------------------"
