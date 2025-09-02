@@ -29,6 +29,8 @@ for f in "$SCRIPTS_DIR"/*; do
     fi
 done
 
+echo "================================ Utility Scripts ================================"
+
 # display menu using basenames
 PS3="Run a script: "
 select choice in "${DISPLAY_NAMES[@]}"; do
