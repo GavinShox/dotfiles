@@ -11,6 +11,6 @@ select file in $STARSHIP_THEMES; do
 	echo "Applying ${file}..."
 	$SCRIPT_DIR/util/backup_file.sh $STARSHIP_PATH
 	cp $file $STARSHIP_PATH
-	echo "-------------------------------- Theme Applied! --------------------------------"
 	break
 done
+echo "-------------------------------- Theme Applied! --------------------------------"
