@@ -51,6 +51,7 @@ for hconf in "$DOTFILE_TOP_LEVEL_DIR"/* "$DOTFILE_TOP_LEVEL_DIR"/.*; do
 done
 
 # show numbered list
+echo
 echo "Available configs:"
 for i in "${!configs[@]}"; do
 	# remove prefix to display to user
@@ -78,7 +79,8 @@ else
 fi
 
 if [[ ${#selected[@]} -eq 0 ]]; then
-    echo "No configs selected, exiting."
+    echo "No configs selected. Exiting..."
+    echo "-----------------------------------------------------------------------------------"
     exit 1
 fi
 
@@ -97,6 +99,7 @@ for sel in "${selected[@]}"; do
 		target_conf="$HOME/$name"
 	else
 		echo "Error: Unkown kind of config ($kind). Exiting..."
+		echo "-----------------------------------------------------------------------------------"
 		exit 1
 	fi
 

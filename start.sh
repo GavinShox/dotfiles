@@ -31,19 +31,34 @@ done
 
 echo "================================ Utility Scripts ================================"
 
-# display menu using basenames
-PS3="Run a script: "
-select choice in "${DISPLAY_NAMES[@]}"; do
-    if [[ -n "$choice" ]]; then
-        index=$((REPLY - 1))
+# allow for multiple scripts to be run in succession without re-launching the script
+while true; do
+	echo "Available scripts:"
+	echo
+
+	for i in "${!DISPLAY_NAMES[@]}"; do
+	    printf "%2d) %s\n" $((i+1)) "${DISPLAY_NAMES[$i]}"
+	done
+
+	echo
+	echo "Press number to run a script, or 'q' to quit."
+
+	# read a single key without requiring Enter
+    read -r -n1 -s input
+    echo
+
+	if [[ "$input" =~ [Qq] ]]; then
+		echo "Exiting..."
+		break
+	elif [[ "$input" =~ ^[0-9]$ ]] && (( input >= 1 && input <= ${#DISPLAY_NAMES[@]} )); then
+		index=$((input-1))
         selected="${FULL_PATHS[$index]}"
 
-        echo "Running: $choice"
+        echo "Running: ${DISPLAY_NAMES[$index]}"
         /bin/bash "$selected"
-        echo "Script complete!"
-        break
-    else
-        echo "Invalid selection."
-    fi
+	else
+		echo "Invalid input: $input"
+	fi
 done
+
 echo "================================================================================="
