@@ -46,3 +46,4 @@ select choice in "${DISPLAY_NAMES[@]}"; do
         echo "Invalid selection."
     fi
 done
+echo "================================================================================="
