@@ -41,7 +41,7 @@ $time\
 show_always = true
 style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
-format = '[ $user]($style)'
+format = '[$user]($style)'
 disabled = false
 
 [hostname]
@@ -65,9 +65,10 @@ disabled = true # Disabled by default
 
 [directory]
 style = "bg:#DA627D"
-format = "[ $path ]($style)"
+format = "[ $path $read_only ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
+read_only = "󰌾"
 
 # Here is how you can shorten some long paths by text replacement
 # similar to mapped_locations in Oh My Posh:
