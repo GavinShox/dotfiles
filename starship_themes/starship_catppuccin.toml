@@ -76,10 +76,10 @@ disabled = false
 
 [directory]
 style = "bg:peach fg:crust"
-format = "[ $path $read_only ]($style)"
+format = "[ $path $read_only]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
-read_only = "󰌾"
+read_only = "󰌾 "
 
 [directory.substitutions]
 "Documents" = "󰈙 "
