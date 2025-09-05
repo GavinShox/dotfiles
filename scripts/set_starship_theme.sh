@@ -15,7 +15,9 @@ for f in "$STARSHIP_THEMES_DIR"/*; do
 	# skip non files to be safe, right now not an issue but in the future it might
 	[ -f "$f" ] || continue
 	FULL_PATHS+=("$f")
-    DISPLAY_NAMES+=("$(basename "$f")")
+	PREFIX="starship_"
+	EXTENSION=".toml"
+    DISPLAY_NAMES+=("$(basename "$f" | sed -e "s/^$PREFIX//" -e "s/$EXTENSION$//")")
 done
 
 echo "Available themes:"

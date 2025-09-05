@@ -8,7 +8,7 @@ echo "-------------------------------- Install Fonts ---------------------------
 read -r -p "This script will install fonts to your ~/.fonts directory - Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
 	echo "Stopping script..."
-	"-------------------------------------------------------------------------------"
+	echo "-------------------------------------------------------------------------------"
 	exit 1
 fi
 

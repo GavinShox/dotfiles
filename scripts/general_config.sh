@@ -62,7 +62,7 @@ done
 
 # ask user for selection(s)
 echo
-read -r -p "Enter numbers separated by spaces (e.g. 1 3 5) or 'a' for all: " selection
+read -r -p "Enter numbers separated by spaces (e.g. 1 3 5) or 'a' for all ('q' to quit): " selection
 
 # convert selection into array
 selected=()
