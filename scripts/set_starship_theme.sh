@@ -22,29 +22,27 @@ done
 
 echo "Available themes:"
 echo
+for i in "${!DISPLAY_NAMES[@]}"; do
+    printf "%2d) %s\n" "$((i+1))" "${DISPLAY_NAMES[$i]}"
+done
 
-PS3=$'\nSelect a theme to apply (or \'q\' to quit): '
-select choice in "${DISPLAY_NAMES[@]}"; do
-	# handle 'q' char entered
+while true; do
+    read -r -p $'\nSelect a theme to apply (or \'q\' to quit): ' REPLY
     if [[ "$REPLY" =~ ^[Qq]$ ]]; then
         echo "Exiting..."
-        break   # exit the select loop
+        echo  "--------------------------------------------------------------------------------"
+        exit 0
+    elif [[ "$REPLY" =~ ^[0-9]+$ ]] && (( REPLY >= 1 && REPLY <= ${#DISPLAY_NAMES[@]} )); then
+        index=$((REPLY - 1))
+        choice="${DISPLAY_NAMES[$index]}"
+        selected="${FULL_PATHS[$index]}"
+        echo "Applying $choice..."
+        "$SCRIPT_DIR"/util/backup_file.sh "$STARSHIP_CONFIG_FILE"
+        cp -f "$selected" "$STARSHIP_CONFIG_FILE"
+        break
+    else
+        echo "Invalid selection. Please enter a number from the list or 'q' to quit."
     fi
-
-	# checks if $choice is valid by ensuring it's non-empty
-	if [[ -n "$choice" ]]; then
-		# convert menu number to array index
-		index=$((REPLY - 1))
-		# get the full path
-	    selected="${FULL_PATHS[$index]}"
-
-		echo "Applying $choice..."
-		"$SCRIPT_DIR"/util/backup_file.sh "$STARSHIP_CONFIG_FILE"
-		cp -f "$selected" "$STARSHIP_CONFIG_FILE"
-		break
-	else
-		echo "Invalid selection - please choose a number from the list, or 'q' to quit..."
-	fi
 done
 
 echo "-------------------------------- Theme Applied! --------------------------------"
