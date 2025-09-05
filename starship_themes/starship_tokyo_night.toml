@@ -29,31 +29,31 @@ disabled = false
 style = "bg:#a3aed2 fg:#090c0c"
 
 [os.symbols]
-Windows = "  "
-Ubuntu = " 󰕈 "
-SUSE = "  "
-Raspbian = " 󰐿 "
-Mint = " 󰣭 "
-Macos = " 󰀵 "
-Manjaro = "  "
-Linux = " 󰌽 "
-Gentoo = " 󰣨 "
-Fedora = " 󰣛 "
-Alpine = "  "
-Amazon = "  "
-Android = "  "
-Arch = " 󰣇 "
-Artix = " 󰣇 "
-CentOS = "  "
-Debian = " 󰣚 "
-Redhat = " 󱄛 "
-RedHatEnterprise = " 󱄛 "
+Windows = " "
+Ubuntu = " 󰕈"
+SUSE = " "
+Raspbian = " 󰐿"
+Mint = " 󰣭"
+Macos = " 󰀵"
+Manjaro = " "
+Linux = " 󰌽"
+Gentoo = " 󰣨"
+Fedora = " 󰣛"
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " 󰣇"
+Artix = " 󰣇"
+CentOS = " "
+Debian = " 󰣚"
+Redhat = " 󱄛"
+RedHatEnterprise = " 󱄛"
 
 [username]
 show_always = true
 style_user = "bg:#a3aed2 fg:#090c0c"
 style_root = "bg:#a3aed2 fg:#090c0c"
-format = '[ $user]($style)'
+format = '[ $user ]($style)'
 
 [hostname]
 ssh_only = true
