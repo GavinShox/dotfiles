@@ -9,10 +9,15 @@ DOTFILE_TOP_LEVEL_DIR="$SCRIPT_DIR/../configs"
 # dotfiles meant to go in ~/.config
 DOTFILE_CONFIG_DIR="$DOTFILE_TOP_LEVEL_DIR/.config"
 
-echo "-------------------------------- Apply Dotfiles --------------------------------"
+TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
+BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
+BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Dotfiles applied! -----------------------------"
+
+echo "$TOP_BORDER"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
-	echo "Stopping script"
+	echo "Exiting script..."
+	echo "$BOTTOM_FAILED_BORDER"
 	exit 1
 fi
 
@@ -79,8 +84,8 @@ else
 fi
 
 if [[ ${#selected[@]} -eq 0 ]]; then
-    echo "No configs selected. Exiting..."
-    echo "-----------------------------------------------------------------------------------"
+    echo "No configs selected. Exiting script..."
+    echo "$BOTTOM_FAILED_BORDER"
     exit 1
 fi
 
@@ -99,7 +104,7 @@ for sel in "${selected[@]}"; do
 		target_conf="$HOME/$name"
 	else
 		echo "Error: Unkown kind of config ($kind). Exiting..."
-		echo "-----------------------------------------------------------------------------------"
+		echo "$BOTTOM_FAILED_BORDER"
 		exit 1
 	fi
 
@@ -129,4 +134,4 @@ for sel in "${selected[@]}"; do
 	fi
 done
 
-echo "-------------------------------- Dotfiles applied! --------------------------------"
+echo "$BOTTOM_SUCCESSFUL_BORDER"
