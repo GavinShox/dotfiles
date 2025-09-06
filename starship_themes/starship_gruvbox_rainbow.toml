@@ -86,7 +86,7 @@ disabled = false
 [container]
 symbol = ''
 style = "bg:color_orange fg:color_fg0"
-format = '[\[$symbol$name\] ]($style)'
+format = '[ \[$symbol$name\] ]($style)'
 disabled = false
 
 [directory]

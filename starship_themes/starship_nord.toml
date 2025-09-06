@@ -1,5 +1,6 @@
 format = """
 [](#3B4252)\
+$os\
 $python\
 $hostname\
 $container\
@@ -34,12 +35,37 @@ command_timeout = 5000
 # Disable the blank line at the start of the prompt
 # add_newline = false
 
+[os]
+disabled = false
+style = "bg:#3B4252"
+
+[os.symbols]
+Windows = ""
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
 # You can also replace your username with a neat symbol like  to save some space
 [username]
 show_always = true
 style_user = "bg:#3B4252"
 style_root = "bg:#3B4252"
-format = '[$user ]($style)'
+format = '[ $user ]($style)'
 
 [hostname]
 ssh_only = true
@@ -51,7 +77,7 @@ disabled = false
 [container]
 symbol = ''
 style = "bg:#3B4252 fg:#93ceed"
-format = '[\[$symbol$name\] ]($style)'
+format = '[ \[$symbol$name\] ]($style)'
 disabled = false
 
 [directory]
