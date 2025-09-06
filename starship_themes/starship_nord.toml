@@ -70,13 +70,13 @@ format = '[ $user ]($style)'
 [hostname]
 ssh_only = true
 ssh_symbol = '󰿂 '
-style = "bg:#3B4252 fg:#93ceed"
+style = "bg:#3B4252"
 format = "[ $ssh_symbol $hostname ]($style)"
 disabled = false
 
 [container]
 symbol = ''
-style = "bg:#3B4252 fg:#93ceed"
+style = "bg:#3B4252"
 format = '[ \[$symbol$name\] ]($style)'
 disabled = false
 
