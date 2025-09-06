@@ -5,7 +5,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STARSHIP_CONFIG_FILE="$HOME/.config/starship.toml"
 STARSHIP_THEMES_DIR="$SCRIPT_DIR/../starship_themes/"
 
-echo "-------------------------------- Apply Starship Theme --------------------------------"
+TOP_BORDER="----------------------------- Apply Starship Theme -----------------------------"
+BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
+BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Theme Applied! --------------------------------"
+
+echo "$TOP_BORDER"
 
 # build arrays for separating display name and full path in select
 FULL_PATHS=()
@@ -30,7 +34,7 @@ while true; do
     read -r -p $'\nSelect a theme to apply (or \'q\' to quit): ' REPLY
     if [[ "$REPLY" =~ ^[Qq]$ ]]; then
         echo "Exiting..."
-        echo  "--------------------------------------------------------------------------------"
+        echo  "$BOTTOM_FAILED_BORDER"
         exit 0
     elif [[ "$REPLY" =~ ^[0-9]+$ ]] && (( REPLY >= 1 && REPLY <= ${#DISPLAY_NAMES[@]} )); then
         index=$((REPLY - 1))
@@ -45,4 +49,4 @@ while true; do
     fi
 done
 
-echo "-------------------------------- Theme Applied! --------------------------------"
+echo "$BOTTOM_SUCCESSFUL_BORDER"

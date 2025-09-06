@@ -1,12 +1,16 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "-------------------------------- Install & Setup Tmux --------------------------------"
+TOP_BORDER="----------------------------- Install & Setup Tmux -----------------------------"
+BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
+BOTTOM_SUCCESSFUL_BORDER="----------------------------- Finished Tmux Setup! -----------------------------"
+
+echo "$TOP_BORDER"
 
 read -r -p "This script will install tmux and plugin manager from repo: <https://github.com/tmux-plugins/tpm> - Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
 	echo "Stopping script..."
-	"--------------------------------------------------------------------------------------"
+	echo "$BOTTOM_FAILED_BORDER"
 	exit 1
 fi
 
@@ -19,4 +23,4 @@ tmux source "$HOME"/.tmux.conf
 tmux kill-server
 echo ".tmux.conf backup made at ${HOME}/.tmux.conf~"
 echo "Config complete! Launch tmux and press 'prefix (Ctrl+s) + I' to install plugins"
-echo "-------------------------------- Finished Tmux Setup! --------------------------------"
+echo "$BOTTOM_SUCCESSFUL_BORDER"

@@ -3,12 +3,16 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FONTS_DIR="$HOME/.fontstest"
 
-echo "-------------------------------- Install Fonts --------------------------------"
+TOP_BORDER="-------------------------------- Install Fonts ---------------------------------"
+BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
+BOTTOM_SUCCESSFUL_BORDER="------------------------------- Fonts Installed! -------------------------------"
+
+echo "$TOP_BORDER"
 
 read -r -p "This script will install fonts to your ~/.fonts directory - Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
 	echo "Stopping script..."
-	echo "-------------------------------------------------------------------------------"
+	echo "$BOTTOM_FAILED_BORDER"
 	exit 1
 fi
 
@@ -29,4 +33,4 @@ for font in $fontlist; do
 	fi
 done
 
-echo "-------------------------------- Fonts Installed! --------------------------------"
+echo "$BOTTOM_SUCCESSFUL_BORDER"

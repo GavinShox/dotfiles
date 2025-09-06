@@ -2,6 +2,9 @@
 
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts"
 
+TOP_BORDER="================================ Utility Scripts ================================"
+BOTTOM_BORDER="================================================================================="
+
 # file/dir names to exclude - these are util scripts not for users
 EXCLUDE=("util")
 
@@ -29,7 +32,7 @@ for f in "$SCRIPTS_DIR"/*; do
     fi
 done
 
-echo "================================ Utility Scripts ================================"
+echo "$TOP_BORDER"
 
 # allow for multiple scripts to be run in succession without re-launching the script
 while true; do
@@ -61,4 +64,4 @@ while true; do
 	fi
 done
 
-echo "================================================================================="
+echo "$BOTTOM_BORDER"
