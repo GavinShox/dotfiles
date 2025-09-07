@@ -45,6 +45,6 @@ cursor-style-blink = false
 shell-integration-features = no-cursor
 
 # gtk-titlebar = false
-# gtk-custom-css = tab-style.css
+gtk-custom-css = tab-style.css
 gtk-wide-tabs = false
-gtk-tabs-location = top
+gtk-tabs-location = bottom
