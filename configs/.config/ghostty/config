@@ -26,16 +26,25 @@
 # resize-overlay-duration = 4s 200ms
 
 theme = catppuccin-mocha.conf
-font-family = "CaskaydiaCove Nerd Font Mono"
+# font-family = "JetBrainsMono NF Medium"
+# font-family = "CaskaydiaCove Nerd Font Mono"
+
+font-family = "Monaspace Neon Medium"
 font-size = 12
+# font-thicken = true
+# font-thicken-strength=255
 bold-is-bright = true
 background-opacity = 0.75
 background-blur = true
 window-padding-x = 15
 window-padding-y = 15
-window-width = 145
-window-height = 40
+window-width = 130
+window-height = 35
 cursor-style = "bar"
 cursor-style-blink = false
 shell-integration-features = no-cursor
-font-thicken = true
+
+# gtk-titlebar = false
+# gtk-custom-css = tab-style.css
+gtk-wide-tabs = false
+gtk-tabs-location = top
