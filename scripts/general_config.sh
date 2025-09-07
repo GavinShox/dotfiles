@@ -58,6 +58,7 @@ done
 # show numbered list
 echo
 echo "Available configs:"
+echo
 for i in "${!configs[@]}"; do
 	# remove prefix to display to user
     sel="${configs[$i]}"
