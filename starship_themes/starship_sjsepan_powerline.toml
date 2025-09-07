@@ -6,7 +6,11 @@
 # Refresh
 #eval "$(starship init bash)"
 #
-#     ~                     󰈙      🔑     
+#    ~   󰈙      🔑            
+# fade_left: =       
+# fade_right: =       
+# end_left: =  
+# end_right: =  
 #
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
@@ -15,13 +19,13 @@
 add_newline = true
 
 # =========prompt=========
-
 format = """
-[ ](fg:bg_1)\
+[ ](fg:bg_1)\
 [$os](bg:bg_1)\
-[ ](fg:bg_2 bg:bg_1)\
+[($cmd_duration)](bg:bg_1)\
+[ ](fg:bg_2 bg:bg_1)\
 [$battery](fg:bg_2 bg:bg_2)\
-[ ](fg:bg_6 bg:bg_2)\
+[ ](fg:bg_6 bg:bg_2)\
 [($status)](bg:bg_6)\
 [$character](bg:bg_6)\
 [$sudo](bg:bg_6)\
@@ -107,9 +111,12 @@ $time\
 [($shell)($shlvl)($jobs)](bg:bg_1)\
 [ ](fg:bg_1)\
 """
+#${custom.live-clock-icon}\
+
+#${custom.files}${custom.directories}\
 
 # A continuation prompt that displays right half-circle and filled-in arrow
-continuation_prompt = "[ ](bg:bg_1)[ ](fg:bg_1)"
+continuation_prompt = "[ ](bg:bg_1)[](fg:bg_1)"
 
 #the continuation prompt may not be show if the right prompt is used; RP only appears in fish/zsh, not bash/pwsh
 # right_format = """
@@ -384,17 +391,16 @@ bg_6='#00FF00'
 #GhostBSD: replace $os with \U000f02a0 󰊠
 
 [os]
-format = "[ $symbol ]($style)"
+format = "[$symbol]($style)"
 style = "fg:fg_1 bg:bg_1"
 disabled = false
 
 [os.symbols]
-Mint = " "#🌿
-Windows = " "
-Ubuntu = " "
+#GhostBSD = "󰊠 "
+AIX = "➿ "
+AlmaLinux = " "
 Alpaquita = " " #alpaca
 Alpine = " "
-AlmaLinux = " "
 Amazon = " "
 Android = " " #
 Arch = " "
@@ -409,7 +415,6 @@ Fedora = " "
 FreeBSD = " "
 Garuda = "󰛓 "
 Gentoo = " "
-#GhostBSD = "󰊠 "
 HardenedBSD = "󰞌 "
 Illumos = " "
 Kali = " "
@@ -419,6 +424,7 @@ Macos = " "
 Manjaro = " "
 Mariner = " "
 MidnightBSD = " "
+Mint = " "#🌿
 NetBSD = " "
 NixOS = " "
 Nobara = " "
@@ -431,12 +437,15 @@ Pop = " "
 Raspbian = " "
 Redhat = " "
 RedHatEnterprise = " "
-RockyLinux = " "
 Redox = "󰀘 "
+RockyLinux = " "
 Solus = "󰠳 "
 SUSE = " "
+Ubuntu = " "
+Ultramarine = "󰼮 "
 Unknown = " "
 Void = " "
+Windows = " "
 
 # ==========status========
 
@@ -447,24 +456,28 @@ discharging_symbol = "󰁽 "
 empty_symbol = '󰂎 '
 disabled = false
 
-# [[battery.display]]
+# [[battery.display]]  
 # threshold = 25
 # style = "bold fg:fg_red2 bg:bg_2"
 
-# [[battery.display]]
+# [[battery.display]]  
 # threshold = 50
 # style = "bold fg:orange bg:bg_2"
 
-# [[battery.display]]
+# [[battery.display]]  
 # threshold = 75
 # style = "bold fg:yellow bg:bg_2"
 
-[[battery.display]]
+[[battery.display]]  
 threshold = 100
 style = "fg:fg_2 bg:bg_2"
 # style = "bold fg:green bg:bg_2"
 
 # ==========status========
+
+[cmd_duration]
+format='[ $duration]($style)'
+style='fg:fg_1 bg:bg_1'
 
 [character]
 success_symbol = "[](fg:success_fg bg:bg_6)" #✅
@@ -472,7 +485,7 @@ error_symbol = "[✘](fg:error_fg bg:bg_6)" #⛔
 
 [status]
 disabled = false
-format = '[\[$status:$common_meaning\] ](fg:error_fg bg:bg_6)'
+format = '[$status:$common_meaning ](fg:error_fg bg:bg_6)'
 
 [sudo]
 symbol = "🔑"
@@ -536,6 +549,21 @@ use_os_path_sep = true
 # will not be replaced, because "Documents" was already substituted before.
 # So either put "Important Documents" before "Documents" or use the substituted version:
 # "Important 󰈙 " = " 󰈙 "
+
+# inspired by @lolbat on CodeBerg
+# [custom.files]
+# description = "Show files count for current directory"
+# command = "find ./ -maxdepth 1 -type f | wc -l"
+# format = "[ 󰈔 $output]($style)"
+# style = "fg:fg_5 bg:bg_5"
+# when = "true"
+
+# [custom.directories]
+# description = "Show directory count count for current directory"
+# command = "find ./ -maxdepth 1 -type d | tail -n +2 | wc -l"
+# format = "[  $output]($style)"
+# style = "fg:fg_5 bg:bg_5"
+# when = "true"
 
 # =========git=========
 
@@ -741,7 +769,7 @@ style = "fg:fg_3 bg:bg_3"
 format = '[$symbol $version ]($style)'
 
 [meson]
-symbol = "󰔷 " # M
+symbol = "󰔷 " # M 
 style = "fg:fg_3 bg:bg_3"
 format = '[$symbol $version ]($style)'
 
@@ -909,22 +937,32 @@ style = "fg:fg_2 bg:bg_2"
 disabled = false
 time_format = "%R" # Hour:Minute Format # %T for seconds
 style = "bg:bg_1"
-format = '[[  $time ](fg:fg_1 bg:bg_1)]($style)'
+format = '[[ $time](fg:fg_1 bg:bg_1)]($style)'
+# format = '[[$time](fg:fg_1 bg:bg_1)]($style)'
+
+#https://github.com/starship/starship/discussions/1252#discussioncomment-9914579
+# [custom.live-clock-icon]
+# command='h="󱑖󱑋󱑌󱑍󱑎󱑏󱑐󱑑󱑒󱑓󱑔󱑕";echo  ${h:$(date +%H)%12:1}'
+# description = "Live updating clock icon, changes hourly. Icons can be customized to your liking."
+# when = true
+# style = "fg:fg_1 bg:bg_1"
+# format = "[$output ]($style)"
 
 [shell]
 disabled=false
-bash_indicator = ''
+bash_indicator = '' 
 fish_indicator='󰈺' #🐟
-zsh_indicator="󰰶"
-powershell_indicator = ''
+zsh_indicator="󰰶" 
+powershell_indicator = '' 
 cmd_indicator = ' ' #
 ion_indicator = ''
-elvish_indicator = "󰘧"
-tcsh_indicator = "󰰤"
-nu_indicator = "nu"
+elvish_indicator = "󰘧" 
+tcsh_indicator = "󰰤" 
+nu_indicator = "nu" 
 xonsh_indicator = "🐚" # seashell emoji
 unknown_indicator = ' '
 style = "fg:fg_1 bg:bg_1"
+format="[ $indicator ]($style)" #space on right b/c double-width symbol
 
 [shlvl]
 disabled=false
@@ -945,3 +983,4 @@ disabled=true
 symbol = " "
 style = "fg:fg_1 bg:bg_1"
 format = '[ $symbol ]($style)'
+
