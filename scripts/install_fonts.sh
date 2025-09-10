@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FONTS_DIR="$HOME/.fontstest"
+FONTS_DIR="$HOME/.fonts"
 
 TOP_BORDER="-------------------------------- Install Fonts ---------------------------------"
 BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
