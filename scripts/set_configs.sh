@@ -3,11 +3,15 @@
 # This script will simply copy config files into the user's home directory, which is all that is needed for most programs
 # (tmux for example has a separate script as it isn't as simple as copying files)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_DIR="$HOME/.config"
-# dotfiles meant to go in ~
-DOTFILE_TOP_LEVEL_DIR="$SCRIPT_DIR/../configs"
-# dotfiles meant to go in ~/.config
-DOTFILE_CONFIG_DIR="$DOTFILE_TOP_LEVEL_DIR/.config"
+# dotfiles top level dir in repo
+CONFIG_DIR="$SCRIPT_DIR/../configs"
+
+# map src_conf path in repo -> target_conf path in $HOME
+get_target_conf() {
+    local src_conf="$1"
+    local rel_path="${src_conf#"$CONFIG_DIR"/}"
+    echo "$HOME/$rel_path"
+}
 
 TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
 BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
@@ -30,29 +34,40 @@ while true; do
     esac
 done
 
-# build array of configs to go in ~/.config
+# build array of configs
 configs=()
-for conf in "$DOTFILE_CONFIG_DIR"/* "$DOTFILE_CONFIG_DIR"/.*; do
+# file/dir names to exclude
+EXCLUDE=(".config" ".local")
+for conf in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
     [ -e "$conf" ] || continue
     base=$(basename "$conf")
 
     # skip . and .. relative dirs
     [[ "$base" == "." || "$base" == ".." ]] && continue
 
-	# prefix with config
-	configs+=("config:$base")
-done
+    # if this directory is in EXCLUDE, recurse inside it instead of treating it as a conf dir
+    skip=false
+    for ex in "${EXCLUDE[@]}"; do
+        if [[ "$base" == "$ex" && -d "$conf" ]]; then
 
-# and configs that will go directly into the home directory
-for hconf in "$DOTFILE_TOP_LEVEL_DIR"/* "$DOTFILE_TOP_LEVEL_DIR"/.*; do
-	[ -e "$hconf" ] || continue
-	base=$(basename "$hconf")
+            for subconf in "$conf"/* "$conf"/.*; do
+                [ -e "$subconf" ] || continue
+                subbase=$(basename "$subconf")
 
-	# skip . and .. relative dirs, and the .config dir
-	[[ "$base" == "." || "$base" == ".." || "$base" == ".config" ]] && continue
+                [[ "$subbase" == "." || "$subbase" == ".." ]] && continue
 
-	# prefix with hconfig
-	configs+=("hconfig:$base")
+                configs+=("$subconf")
+            done
+
+            skip=true
+            break
+        fi
+    done
+
+	# if not skipped, add to configs array
+    if ! $skip; then
+        configs+=("$conf")
+    fi
 done
 
 # show numbered list
@@ -61,14 +76,20 @@ echo "Available configs:"
 echo
 for i in "${!configs[@]}"; do
 	# remove prefix to display to user
-    sel="${configs[$i]}"
-    name="${sel#*:}"
+	name="$(basename "${configs[$i]}")"
     printf "%2d) %s\n" "$((i+1))" "$name"
 done
 
 # ask user for selection(s)
 echo
 read -r -p "Enter numbers separated by spaces (e.g. 1 3 5) or 'a' for all ('q' to quit): " selection
+
+# quit option
+if [[ "$selection" =~ ^[Qq]$ ]]; then
+    echo "Exiting script..."
+    echo "$BOTTOM_FAILED_BORDER"
+    exit 0
+fi
 
 # convert selection into array
 selected=()
@@ -90,24 +111,9 @@ if [[ ${#selected[@]} -eq 0 ]]; then
     exit 1
 fi
 
-for sel in "${selected[@]}"; do
-	# separate prefix that was applied above from the config name
-	kind="${sel%%:*}"
-	name="${sel#*:}"
-
-	# configs to go into ~/.config
-	if [[ "$kind" == "config" ]]; then
-		src_conf="$DOTFILE_CONFIG_DIR/$name"
-	    target_conf="$CONFIG_DIR/$name"
-	# configs to go into ~
-	elif [[ "$kind" == "hconfig" ]]; then
-		src_conf="$DOTFILE_TOP_LEVEL_DIR/$name"
-		target_conf="$HOME/$name"
-	else
-		echo "Error: Unkown kind of config ($kind). Exiting..."
-		echo "$BOTTOM_FAILED_BORDER"
-		exit 1
-	fi
+for src_conf in "${selected[@]}"; do
+    target_conf="$(get_target_conf "$src_conf")"
+    name="$(basename "$src_conf")"
 
 	# handle config directory
 	if [[ -d "$src_conf" ]]; then
@@ -116,11 +122,10 @@ for sel in "${selected[@]}"; do
 	        echo "Backing up $name config..."
 	        "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
 		fi
-		
+
 	    echo "Applying $name config..."
 	    mkdir -p "$target_conf"
-		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program e.g. two incompatible addons
-	    #cp -rf "$src_conf"/* "$target_conf"
+		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program
 	    rsync -a "$src_conf"/ "$target_conf"/
 	# handle config file
 	elif [[ -f "$src_conf" ]]; then
