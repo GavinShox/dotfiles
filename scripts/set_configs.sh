@@ -6,16 +6,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # dotfiles top level dir in repo
 CONFIG_DIR="$SCRIPT_DIR/../configs"
 
+TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
+BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
+BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Dotfiles applied! -----------------------------"
+
 # map src_conf path in repo -> target_conf path in $HOME
 get_target_conf() {
     local src_conf="$1"
     local rel_path="${src_conf#"$CONFIG_DIR"/}"
     echo "$HOME/$rel_path"
 }
-
-TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
-BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
-BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Dotfiles applied! -----------------------------"
 
 echo "$TOP_BORDER"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
