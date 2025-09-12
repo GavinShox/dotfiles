@@ -118,12 +118,21 @@ check_diff() {
     local target="$2"
     local name="$3"
 
-    # determine if directory or file
+    # pick diff command depending on support for --color
+    # then check $target type, use recursive flag if its a dir
     local diff_cmd
-    if [[ -d "$target" ]]; then
-        diff_cmd=(diff -r "$target" "$src")
+    if diff --help 2>&1 | grep -q -- '--color'; then
+        if [[ -d "$target" ]]; then
+            diff_cmd=(diff --color=auto -r "$target" "$src")
+        else
+            diff_cmd=(diff --color=auto "$target" "$src")
+        fi
     else
-        diff_cmd=(diff "$target" "$src")
+        if [[ -d "$target" ]]; then
+            diff_cmd=(diff -r "$target" "$src")
+        else
+            diff_cmd=(diff "$target" "$src")
+        fi
     fi
 
     # return 1 if no diff
@@ -135,7 +144,7 @@ check_diff() {
     # differences found, show them and prompt
     "${diff_cmd[@]}"
     while true; do
-        read -r -p "Difference found between the repo's $name config and your current config. Continue? (y/n): " input
+        read -r -p "Difference found between the repo's $name config and your current config. Update repo? (y/n): " input
         case "$input" in
             [Yy]) return 0 ;;   # apply
             [Nn]) return 2 ;;   # answered no, skip
