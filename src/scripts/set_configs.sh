@@ -153,6 +153,7 @@ for src_conf in "${selected[@]}"; do
 		bash "$post_install_script"
 		echo "Post-install script complete!"
 	fi
+	echo
 done
 
 echo "$BOTTOM_SUCCESSFUL_BORDER"
