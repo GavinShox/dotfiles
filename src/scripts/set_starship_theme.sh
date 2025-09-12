@@ -43,6 +43,7 @@ while true; do
         echo "Applying $choice..."
         "$SCRIPT_DIR"/util/backup_file.sh "$STARSHIP_CONFIG_FILE"
         cp -f "$selected" "$STARSHIP_CONFIG_FILE"
+        echo "Applied $choice!"
         break
     else
         echo "Invalid selection. Please enter a number from the list or 'q' to quit."

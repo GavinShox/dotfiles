@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts"
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/src/scripts"
 
 TOP_BORDER="================================ Utility Scripts ================================"
 BOTTOM_BORDER="================================================================================="
