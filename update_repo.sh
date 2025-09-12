@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_DIR="$SCRIPT_DIR/configs"
+CONFIG_DIR="$SCRIPT_DIR/src/configs"
 
 TOP_BORDER="============================== Update Current Configs =============================="
 BOTTOM_FAILED_BORDER="===================================================================================="
