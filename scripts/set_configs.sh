@@ -5,6 +5,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # dotfiles top level dir in repo
 CONFIG_DIR="$SCRIPT_DIR/../configs"
+POST_INSTALL_DIR="$SCRIPT_DIR/../post_install"
+POST_INSTALL_SCRIPT_SUFFIX="_post_install.sh"
 
 TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
 BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
@@ -115,6 +117,8 @@ fi
 for src_conf in "${selected[@]}"; do
     target_conf="$(get_target_conf "$src_conf")"
     name="$(basename "$src_conf")"
+    post_install_script_name="$name$POST_INSTALL_SCRIPT_SUFFIX"
+    post_install_script="$POST_INSTALL_DIR/$post_install_script_name"
 
 	# handle config directory
 	if [[ -d "$src_conf" ]]; then
@@ -128,6 +132,8 @@ for src_conf in "${selected[@]}"; do
 	    mkdir -p "$target_conf"
 		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program
 	    rsync -a "$src_conf"/ "$target_conf"/
+	    echo "Applied $name config!"
+ 
 	# handle config file
 	elif [[ -f "$src_conf" ]]; then
 		if [[ "$backup" == true ]]; then
@@ -138,6 +144,14 @@ for src_conf in "${selected[@]}"; do
 
 		echo "Applying $name config..."
 		cp -f "$src_conf" "$target_conf"
+		echo "Applied $name config!"
+	fi
+
+	# run post install script if it exists
+	if [[ -f "$post_install_script" ]]; then
+		echo "Post-install script for $name config found. Running..."
+		bash "$post_install_script"
+		echo "Post-install script complete!"
 	fi
 done
 
