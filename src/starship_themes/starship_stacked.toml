@@ -1,0 +1,135 @@
+format = """
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$c\
+$cpp\
+$rust\
+$java\
+$golang\
+$docker_context\
+$kubernetes
+$time
+$memory_usage    $battery
+$os [$username](yellow)[@](cyan)[$hostname](green) $sudo$directory$character
+"""
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = '[➜](bold red)'
+
+[sudo]
+format = '[\(as $symbol\) ]($style)'
+style = 'bold purple'
+symbol = 'sudo'
+disabled = false
+
+[battery]
+full_symbol = "• "
+charging_symbol = "⇡ "
+discharging_symbol = "⇣ "
+
+[[battery.display]]
+threshold = 100
+
+[time]
+format = "[$time]($style)"
+disabled = false
+
+[username]
+show_always = true
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style)"
+
+[localip]
+ssh_only = false
+format = '[$localipv4]($style)'
+disabled = false
+
+[c]
+format = "[$symbol($version )]($style)"
+symbol = " "
+
+[directory]
+read_only = " "
+
+[docker_context]
+symbol = " "
+format = "[$symbol$context]($style)"
+
+[elm]
+symbol = " "
+
+[golang]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[memory_usage]
+format = "[$symbol: $ram]($style)"
+symbol = " "
+threshold = -1
+disabled = false
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+symbol = " "
+
+[os]
+disabled = false
+
+[os.symbols]
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "﯑ "
+Gentoo = " "
+HardenedBSD = "ﲊ "
+Illumos = " "
+Linux = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = " "
+openSUSE = " "
+OracleLinux = " "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+Redox = " "
+Solus = "ﴱ "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Windows = " "
+
+[package]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+format = "[$symbol($version )]($style)"
