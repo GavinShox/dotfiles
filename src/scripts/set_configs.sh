@@ -7,6 +7,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$SCRIPT_DIR/../configs"
 POST_INSTALL_DIR="$SCRIPT_DIR/../post_install"
 POST_INSTALL_SCRIPT_SUFFIX="_post_install.sh"
+EXCLUDE_DIR="$SCRIPT_DIR/../exclude"
+EXCLUDE_FILE_SUFFIX=".exclude"
 
 TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
 BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
@@ -130,8 +132,14 @@ for src_conf in "${selected[@]}"; do
 
 	    echo "Applying $name config..."
 	    mkdir -p "$target_conf"
-		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program
-	    rsync -a --delete "$src_conf"/ "$target_conf"/
+
+		# check for an exclude file
+		exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+	    if [[ -f "$exclude_file" ]]; then
+			rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
+	    else
+	    	rsync -a --delete "$src_conf"/ "$target_conf"/
+	    fi
 	    echo "Applied $name config!"
  
 	# handle config file

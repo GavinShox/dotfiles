@@ -2,6 +2,8 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$SCRIPT_DIR/src/configs"
+EXCLUDE_DIR="$SCRIPT_DIR/src/exclude"
+EXCLUDE_FILE_SUFFIX=".exclude"
 
 TOP_BORDER="============================== Update Current Configs =============================="
 BOTTOM_FAILED_BORDER="===================================================================================="
@@ -179,11 +181,22 @@ for target_conf in "${selected[@]}"; do
     # reach here on a 0 return of check_diff
     if [[ -d "$src_conf" ]]; then
         echo "Updating $name config..."
+        # mkdir not really needed as the dir has to exist to get here, but just in case...
         mkdir -p "$target_conf"
-        rsync -a --delete "$src_conf"/ "$target_conf"/
+
+		# check for exclude file
+		exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+	    if [[ -f "$exclude_file" ]]; then
+			rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
+	    else
+	    	rsync -a --delete "$src_conf"/ "$target_conf"/
+	    fi
+        echo "Updated $name config!"
+
     elif [[ -f "$src_conf" ]]; then
         echo "Updating $name config..."
         cp -f "$src_conf" "$target_conf"
+        echo "Updated $name config!"
     fi
 done
 
