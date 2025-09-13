@@ -131,7 +131,7 @@ for src_conf in "${selected[@]}"; do
 	    echo "Applying $name config..."
 	    mkdir -p "$target_conf"
 		# TODO Using rsync as is, or use --delete flag to make sure extra files in target won't break a program
-	    rsync -a "$src_conf"/ "$target_conf"/
+	    rsync -a --delete "$src_conf"/ "$target_conf"/
 	    echo "Applied $name config!"
  
 	# handle config file

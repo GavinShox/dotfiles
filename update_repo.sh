@@ -180,7 +180,7 @@ for target_conf in "${selected[@]}"; do
     if [[ -d "$src_conf" ]]; then
         echo "Updating $name config..."
         mkdir -p "$target_conf"
-        rsync -a "$src_conf"/ "$target_conf"/
+        rsync -a --delete "$src_conf"/ "$target_conf"/
     elif [[ -f "$src_conf" ]]; then
         echo "Updating $name config..."
         cp -f "$src_conf" "$target_conf"
