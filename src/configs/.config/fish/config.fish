@@ -4,8 +4,12 @@ set -gx EDITOR micro
 set -gx MICRO_TRUECOLOR 1
 
 starship init fish | source
+# transient prompt
+enable_transience
+
 fzf --fish | source
 zoxide init fish | source
+
 fastfetch
 if status is-interactive
     # Commands to run in interactive sessions can go here
