@@ -4,7 +4,10 @@ set -gx EDITOR micro
 set -gx MICRO_TRUECOLOR 1
 
 starship init fish | source
-# transient prompt
+# transient prompt setup for starship
+function starship_transient_prompt_func
+  starship module character
+end
 enable_transience
 
 fzf --fish | source
