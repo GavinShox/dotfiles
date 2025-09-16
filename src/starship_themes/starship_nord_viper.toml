@@ -14,12 +14,14 @@
 #  ______ _(_) __| |
 # |_  / _` | |/ _` |
 #  / / (_| | | (_| |
-# /___\__,_|_|\__,_|	zaid-hassan
+# /___\__,_|_|\__,_|	zaid-hassan (Modified)
 
 # ---------------------------------------------------------------
 format = """
 [░▒▓](#2e3440)\
 $os\
+$hostname\
+$container\
 $username\
 [](bg:#3b4252 fg:#2e3440)\
 $directory\
@@ -53,16 +55,50 @@ $character\
 [line_break]
 disabled = false
 
+[os]
+disabled = false
+style = "bg:#2e3440"
+
+[os.symbols]
+Windows = ""
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
 [username]
 show_always = true
 style_user = "bg:#2e3440"
 style_root = "bg:#9A348E"
-format = '[ $user ]($style)'
+format = '[ $user ]($style)'
 disabled = false
 
-[os]
-style = "bg:#9A348E"
-disabled = true # Disabled by default
+[hostname]
+ssh_only = true
+ssh_symbol = '󰿂 '
+style = "bg:#2e3440"
+format = "[ $ssh_symbol $hostname ]($style)"
+disabled = false
+
+[container]
+symbol = ''
+style = "bg:#2e3440"
+format = '[ \[$symbol$name\] ]($style)'
+disabled = false
 
 [directory]
 style = "bg:#3b4252"
@@ -84,7 +120,7 @@ format = '[ $symbol ($version) ]($style)'
 [python]
 symbol = " "
 style = "bg:#4c566a"
-format = '[ $symbol ($version) ]($style)'
+format = '[ $symbol ($version)(\(#$virtualenv\)) ]($style)'
 
 [docker_context]
 symbol = " "
