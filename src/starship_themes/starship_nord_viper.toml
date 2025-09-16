@@ -102,9 +102,10 @@ disabled = false
 
 [directory]
 style = "bg:#3b4252"
-format = "[ $path ]($style)"
+format = "[ $path $read_only]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
+read_only = "󰌾 "
 
 [directory.substitutions]
 "Documents" = " "
@@ -129,12 +130,12 @@ format = '[ $symbol $context ]($style) $path'
 
 [elixir]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [elm]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [git_branch]
@@ -148,42 +149,42 @@ format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [haskell]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [java]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [julia]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [nim]
 symbol = " "
-style = "bg:##434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [rust]
 symbol = ""
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [scala]
 symbol = " "
-style = "bg:#434c5e"
+style = "bg:#4c566a"
 format = '[ $symbol ($version) ]($style)'
 
 [time]
