@@ -4,5 +4,6 @@
     },
     "colorscheme": "catppuccin-mocha-transparent",
     "softwrap": true,
+    "tabstospaces": true,
     "wordwrap": true
 }

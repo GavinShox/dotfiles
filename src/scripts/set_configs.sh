@@ -122,6 +122,10 @@ for src_conf in "${selected[@]}"; do
     post_install_script_name="$name$POST_INSTALL_SCRIPT_SUFFIX"
     post_install_script="$POST_INSTALL_DIR/$post_install_script_name"
 
+    # check if program is installed - if it isn't, offer to install
+    # if ! command -v "$name" >/dev/null 2>&1; then
+    # fi
+
 	# handle config directory
 	if [[ -d "$src_conf" ]]; then
 		if [[ "$backup" == true ]]; then
