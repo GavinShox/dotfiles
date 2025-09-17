@@ -10,6 +10,13 @@ POST_INSTALL_SCRIPT_SUFFIX="_post_install.sh"
 EXCLUDE_DIR="$SCRIPT_DIR/../exclude"
 EXCLUDE_FILE_SUFFIX=".exclude"
 
+# Mapping between config name and package name (if they differ)
+# (allows multiple as different package managers could have different names)
+declare -A CONFIG_BIN_MAP=(
+    [.tmux.conf]="tmux"
+    [pip]="python3-pip pip3"
+)
+
 TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
 BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
 BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Dotfiles applied! -----------------------------"
@@ -122,9 +129,23 @@ for src_conf in "${selected[@]}"; do
     post_install_script_name="$name$POST_INSTALL_SCRIPT_SUFFIX"
     post_install_script="$POST_INSTALL_DIR/$post_install_script_name"
 
-    # check if program is installed - if it isn't, offer to install
-    # if ! command -v "$name" >/dev/null 2>&1; then
-    # fi
+    # check if program is installed
+    # use $name as package name, unless there is an override in $CONFIG_BIN_MAP
+    required_bins="${CONFIG_BIN_MAP[$name]:-$name}"
+
+    installed=false
+    for bin in $required_bins; do
+        # check all the possible bin variations to see if one is installed
+        if command -v "$bin" >/dev/null 2>&1; then
+            installed=true
+            break
+        fi
+    done
+    # if it isn't installed, offer to install
+    if [[ "$installed" == false ]]; then
+        # TODO change install_package script to return an error if no package found, so we can try all the possible package names 
+        echo ""
+    fi
 
 	# handle config directory
 	if [[ -d "$src_conf" ]]; then
