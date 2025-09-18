@@ -31,17 +31,23 @@ get_target_conf() {
 echo "$TOP_BORDER"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
-	echo "Exiting script..."
-	echo "$BOTTOM_FAILED_BORDER"
-	exit 1
+    echo "Exiting script..."
+    echo "$BOTTOM_FAILED_BORDER"
+    exit 1
 fi
 
 while true; do
     read -r -p "Do you want to make backups of your existing files? (y/n): " backup_input
     case "$backup_input" in
-        [Yy]) backup=true; break ;;
-        [Nn]) backup=false; break ;;
-        *) echo "Please answer yes (y) or no (n)." ;;
+    [Yy])
+        backup=true
+        break
+        ;;
+    [Nn])
+        backup=false
+        break
+        ;;
+    *) echo "Please answer yes (y) or no (n)." ;;
     esac
 done
 
@@ -75,7 +81,7 @@ for conf in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
         fi
     done
 
-	# if not skipped, add to configs array
+    # if not skipped, add to configs array
     if ! $skip; then
         configs+=("$conf")
     fi
@@ -86,9 +92,9 @@ echo
 echo "Available configs:"
 echo
 for i in "${!configs[@]}"; do
-	# remove prefix to display to user
-	name="$(basename "${configs[$i]}")"
-    printf "%2d) %s\n" "$((i+1))" "$name"
+    # remove prefix to display to user
+    name="$(basename "${configs[$i]}")"
+    printf "%2d) %s\n" "$((i + 1))" "$name"
 done
 
 # ask user for selection(s)
@@ -109,8 +115,8 @@ if [[ "$selection" =~ ^[Aa]$ ]]; then
     selected=("${configs[@]}")
 else
     for num in $selection; do
-        if [[ "$num" =~ ^[0-9]+$ ]] && (( num >= 1 && num <= ${#configs[@]} )); then
-            selected+=("${configs[$((num-1))]}")
+        if [[ "$num" =~ ^[0-9]+$ ]] && ((num >= 1 && num <= ${#configs[@]})); then
+            selected+=("${configs[$((num - 1))]}")
         else
             echo "Invalid selection: $num"
         fi
@@ -143,50 +149,66 @@ for src_conf in "${selected[@]}"; do
     done
     # if it isn't installed, offer to install
     if [[ "$installed" == false ]]; then
-        # TODO change install_package script to return an error if no package found, so we can try all the possible package names 
-        echo ""
+        install_successful=false
+
+        # try all possible bin names
+        for bin in $required_bins; do
+            echo "Trying to install package $bin..."
+            "$SCRIPT_DIR"/util/install_package.sh "$bin" || {
+                echo "Couldn't install package with name: $bin - checking if alternate package names exist"
+                continue
+            }
+            # gets here if error handling above doesn't trigger, meaning the package installed
+            echo "Package $bin installed!"
+            install_successful=true
+            break
+        done
+
+        if [[ ! "$install_successful" ]]; then
+            echo "Warning: Couldn't install package for '$name' config - setting config anyway..."
+        fi
     fi
 
-	# handle config directory
-	if [[ -d "$src_conf" ]]; then
-		if [[ "$backup" == true ]]; then
-	    	echo
-	        echo "Backing up $name config..."
-	        "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
-		fi
+    # handle config directory
+    if [[ -d "$src_conf" ]]; then
+        if [[ "$backup" == true ]]; then
+            echo
+            echo "Backing up $name config..."
+            "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
+        fi
 
-	    echo "Applying $name config..."
-	    mkdir -p "$target_conf"
+        echo "Applying $name config..."
+        mkdir -p "$target_conf"
 
-		# check for an exclude file
-		exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
-	    if [[ -f "$exclude_file" ]]; then
-			rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
-	    else
-	    	rsync -a --delete "$src_conf"/ "$target_conf"/
-	    fi
-	    echo "Applied $name config!"
- 
-	# handle config file
-	elif [[ -f "$src_conf" ]]; then
-		if [[ "$backup" == true ]]; then
-	    	echo
-	        echo "Backing up $name config..."
-	        "$SCRIPT_DIR"/util/backup_file.sh "$target_conf"
-		fi
+        # check for an exclude file
+        exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+        if [[ -f "$exclude_file" ]]; then
+            rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
+        else
+            rsync -a --delete "$src_conf"/ "$target_conf"/
+        fi
+        echo "Applied $name config!"
 
-		echo "Applying $name config..."
-		cp -f "$src_conf" "$target_conf"
-		echo "Applied $name config!"
-	fi
+    # handle config file
+    elif [[ -f "$src_conf" ]]; then
+        if [[ "$backup" == true ]]; then
+            echo
+            echo "Backing up $name config..."
+            "$SCRIPT_DIR"/util/backup_file.sh "$target_conf"
+        fi
 
-	# run post install script if it exists
-	if [[ -f "$post_install_script" ]]; then
-		echo "Post-install script for $name config found. Running..."
-		bash "$post_install_script"
-		echo "Post-install script complete!"
-	fi
-	echo
+        echo "Applying $name config..."
+        cp -f "$src_conf" "$target_conf"
+        echo "Applied $name config!"
+    fi
+
+    # run post install script if it exists
+    if [[ -f "$post_install_script" ]]; then
+        echo "Post-install script for $name config found. Running..."
+        bash "$post_install_script"
+        echo "Post-install script complete!"
+    fi
+    echo
 done
 
 echo "$BOTTOM_SUCCESSFUL_BORDER"
