@@ -137,6 +137,7 @@ for src_conf in "${selected[@]}"; do
 
     # check if program is installed
     # use $name as package name, unless there is an override in $CONFIG_BIN_MAP
+    echo "Checking if program for '$name' config is installed..."
     required_bins="${CONFIG_BIN_MAP[$name]:-$name}"
 
     installed=false
@@ -149,24 +150,30 @@ for src_conf in "${selected[@]}"; do
     done
     # if it isn't installed, offer to install
     if [[ "$installed" == false ]]; then
-        install_successful=false
+        read -r -p "This config ($name) is for a program that isn't installed. Do you want to install it? (y/n): " install_input
+        if [[ ! $install_input =~ ^[Yy]$ ]]; then
+            echo "Skipping install..."
+        else
+            install_successful=false
+            # try all possible bin names
+            for bin in $required_bins; do
+                echo "Trying to install package $bin..."
+                "$SCRIPT_DIR"/util/install_package.sh "$bin" || {
+                    echo "Couldn't install package with name: $bin - checking if alternate package names exist"
+                    continue
+                }
+                # gets here if error handling above doesn't trigger, meaning the package installed
+                echo "Package $bin installed!"
+                install_successful=true
+                break
+            done
 
-        # try all possible bin names
-        for bin in $required_bins; do
-            echo "Trying to install package $bin..."
-            "$SCRIPT_DIR"/util/install_package.sh "$bin" || {
-                echo "Couldn't install package with name: $bin - checking if alternate package names exist"
-                continue
-            }
-            # gets here if error handling above doesn't trigger, meaning the package installed
-            echo "Package $bin installed!"
-            install_successful=true
-            break
-        done
-
-        if [[ ! "$install_successful" ]]; then
-            echo "Warning: Couldn't install package for '$name' config - setting config anyway..."
+            if [[ "$install_successful" == false ]]; then
+                echo "Warning: Couldn't install package for '$name' config - setting config anyway..."
+            fi
         fi
+    else
+        echo "Program for '$name' config is already installed."
     fi
 
     # handle config directory
