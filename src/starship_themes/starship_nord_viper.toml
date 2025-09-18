@@ -145,7 +145,7 @@ format = '[ $symbol $branch ]($style)'
 
 [git_status]
 style = "bg:#434c5e"
-format = '[$all_status$ahead_behind ]($style)'
+format = '[[($all_status$ahead_behind )]($style)]($style)'
 
 [golang]
 symbol = " "
