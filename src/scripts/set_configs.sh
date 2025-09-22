@@ -17,9 +17,18 @@ declare -A CONFIG_BIN_MAP=(
     [pip]="python3-pip pip3"
 )
 
-TOP_BORDER="-------------------------------- Apply Dotfiles --------------------------------"
-BOTTOM_FAILED_BORDER="--------------------------------------------------------------------------------"
-BOTTOM_SUCCESSFUL_BORDER="-------------------------------- Dotfiles applied! -----------------------------"
+# colour codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # no colour
+
+TOP_BORDER="${PURPLE}-------------------------------- Apply Dotfiles --------------------------------${NC}"
+BOTTOM_FAILED_BORDER="${PURPLE}--------------------------------------------------------------------------------${NC}"
+BOTTOM_SUCCESSFUL_BORDER="${PURPLE}-------------------------------- Dotfiles applied! -----------------------------${NC}"
 
 # map src_conf path in repo -> target_conf path in $HOME
 get_target_conf() {
@@ -28,11 +37,11 @@ get_target_conf() {
     echo "$HOME/$rel_path"
 }
 
-echo "$TOP_BORDER"
+echo -e "$TOP_BORDER"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
-    echo "Exiting script..."
-    echo "$BOTTOM_FAILED_BORDER"
+    echo -e "${RED}Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
     exit 1
 fi
 
@@ -47,7 +56,7 @@ while true; do
         backup=false
         break
         ;;
-    *) echo "Please answer yes (y) or no (n)." ;;
+    *) echo -e "${YELLOW}Please answer yes (y) or no (n).${NC}" ;;
     esac
 done
 
@@ -89,7 +98,7 @@ done
 
 # show numbered list
 echo
-echo "Available configs:"
+echo -e "${CYAN}Available configs:${NC}"
 echo
 for i in "${!configs[@]}"; do
     # remove prefix to display to user
@@ -104,8 +113,8 @@ echo
 
 # quit option
 if [[ "$selection" =~ ^[Qq]$ ]]; then
-    echo "Exiting script..."
-    echo "$BOTTOM_FAILED_BORDER"
+    echo -e "${RED}Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
     exit 0
 fi
 
@@ -118,18 +127,19 @@ else
         if [[ "$num" =~ ^[0-9]+$ ]] && ((num >= 1 && num <= ${#configs[@]})); then
             selected+=("${configs[$((num - 1))]}")
         else
-            echo "Invalid selection: $num"
+            echo -e "${RED}Invalid selection: $num${NC}"
         fi
     done
 fi
 
 if [[ ${#selected[@]} -eq 0 ]]; then
-    echo "No configs selected. Exiting script..."
-    echo "$BOTTOM_FAILED_BORDER"
+    echo -e "${RED}No configs selected. Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
     exit 1
 fi
 
 for src_conf in "${selected[@]}"; do
+    echo
     target_conf="$(get_target_conf "$src_conf")"
     name="$(basename "$src_conf")"
     post_install_script_name="$name$POST_INSTALL_SCRIPT_SUFFIX"
@@ -137,7 +147,7 @@ for src_conf in "${selected[@]}"; do
 
     # check if program is installed
     # use $name as package name, unless there is an override in $CONFIG_BIN_MAP
-    echo "Checking if program for '$name' config is installed..."
+    echo -e "${BLUE}Checking if program for '$name' config is installed...${NC}"
     required_bins="${CONFIG_BIN_MAP[$name]:-$name}"
 
     installed=false
@@ -152,39 +162,38 @@ for src_conf in "${selected[@]}"; do
     if [[ "$installed" == false ]]; then
         read -r -p "This config ($name) is for a program that isn't installed. Do you want to install it? (y/n): " install_input
         if [[ ! $install_input =~ ^[Yy]$ ]]; then
-            echo "Skipping install..."
+            echo -e "${YELLOW}Skipping install...${NC}"
         else
             install_successful=false
             # try all possible bin names
             for bin in $required_bins; do
-                echo "Trying to install package $bin..."
+                echo -e "${BLUE}Trying to install package $bin...${NC}"
                 "$SCRIPT_DIR"/util/install_package.sh "$bin" || {
-                    echo "Couldn't install package with name: $bin - checking if alternate package names exist"
+                    echo -e "${YELLOW}Couldn't install package with name: $bin - checking if alternate package names exist${NC}"
                     continue
                 }
                 # gets here if error handling above doesn't trigger, meaning the package installed
-                echo "Package $bin installed!"
+                echo -e "${GREEN}Package $bin installed!${NC}"
                 install_successful=true
                 break
             done
 
             if [[ "$install_successful" == false ]]; then
-                echo "Warning: Couldn't install package for '$name' config - setting config anyway..."
+                echo -e "${YELLOW}Warning: Couldn't install package for '$name' config - setting config anyway...${NC}"
             fi
         fi
     else
-        echo "Program for '$name' config is already installed."
+        echo -e "${GREEN}Program for '$name' config is already installed.${NC}"
     fi
 
     # handle config directory
     if [[ -d "$src_conf" ]]; then
         if [[ "$backup" == true ]]; then
-            echo
-            echo "Backing up $name config..."
+            echo -e "${PURPLE}Backing up $name config...${NC}"
             "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
         fi
 
-        echo "Applying $name config..."
+        echo -e "${BLUE}Applying $name config...${NC}"
         mkdir -p "$target_conf"
 
         # check for an exclude file
@@ -194,28 +203,27 @@ for src_conf in "${selected[@]}"; do
         else
             rsync -a --delete "$src_conf"/ "$target_conf"/
         fi
-        echo "Applied $name config!"
+        echo -e "${GREEN}Applied $name config!${NC}"
 
     # handle config file
     elif [[ -f "$src_conf" ]]; then
         if [[ "$backup" == true ]]; then
-            echo
-            echo "Backing up $name config..."
+            echo -e "${PURPLE}Backing up $name config...${NC}"
             "$SCRIPT_DIR"/util/backup_file.sh "$target_conf"
         fi
 
-        echo "Applying $name config..."
+        echo -e "${BLUE}Applying $name config...${NC}"
         cp -f "$src_conf" "$target_conf"
-        echo "Applied $name config!"
+        echo -e "${GREEN}Applied $name config!${NC}"
     fi
 
     # run post install script if it exists
     if [[ -f "$post_install_script" ]]; then
-        echo "Post-install script for $name config found. Running..."
+        echo -e "${CYAN}Post-install script for $name config found. Running...${NC}"
         bash "$post_install_script"
-        echo "Post-install script complete!"
+        echo -e "${GREEN}Post-install script complete!${NC}"
     fi
     echo
 done
 
-echo "$BOTTOM_SUCCESSFUL_BORDER"
+echo -e "$BOTTOM_SUCCESSFUL_BORDER"

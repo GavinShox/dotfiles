@@ -5,9 +5,18 @@ CONFIG_DIR="$SCRIPT_DIR/src/configs"
 EXCLUDE_DIR="$SCRIPT_DIR/src/exclude"
 EXCLUDE_FILE_SUFFIX=".exclude"
 
-TOP_BORDER="============================== Update Current Configs =============================="
-BOTTOM_FAILED_BORDER="===================================================================================="
-BOTTOM_SUCCESSFUL_BORDER="============================= Current Configs Updated! ============================="
+# colour codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # no colour
+
+TOP_BORDER="${PURPLE}============================== Update Current Configs ===============================${NC}"
+BOTTOM_FAILED_BORDER="${PURPLE}=====================================================================================${NC}"
+BOTTOM_SUCCESSFUL_BORDER="${PURPLE}============================= Current Configs Updated! ==============================${NC}"
 
 # function to map target path in repo -> src path in $HOME
 get_src_conf() {
@@ -16,12 +25,12 @@ get_src_conf() {
     echo "$HOME/$rel_path"
 }
 
-echo "$TOP_BORDER"
+echo -e "$TOP_BORDER"
 read -r -p "Existing config files in this repo will be overwritten. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
-	echo "Exiting script..."
-	echo "$BOTTOM_FAILED_BORDER"
-	exit 1
+    echo -e "${RED}Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
+    exit 1
 fi
 
 # build array of configs
@@ -31,15 +40,15 @@ EXCLUDE=(".config" ".local")
 for conf in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
     [ -e "$conf" ] || continue
     base=$(basename "$conf")
-    
+
     # skip . and .. relative dirs
     [[ "$base" == "." || "$base" == ".." ]] && continue
 
     # check if src_conf actually exists in users current configs
     src_conf="$(get_src_conf "$conf")"
-	if [[ ! -f "$src_conf" && ! -d "$src_conf" ]]; then
-	    continue   # not a file or directory
-	fi
+    if [[ ! -f "$src_conf" && ! -d "$src_conf" ]]; then
+        continue # not a file or directory
+    fi
 
     # if this directory is in EXCLUDE, recurse inside it instead of treating it as a conf dir
     skip=false
@@ -53,10 +62,10 @@ for conf in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
                 [[ "$subbase" == "." || "$subbase" == ".." ]] && continue
 
                 # check if src_conf actually exists in users current configs
-			    sub_src_conf="$(get_src_conf "$subconf")"
-				if [[ ! -f "$sub_src_conf" && ! -d "$sub_src_conf" ]]; then
-				    continue   # not a file or directory
-				fi
+                sub_src_conf="$(get_src_conf "$subconf")"
+                if [[ ! -f "$sub_src_conf" && ! -d "$sub_src_conf" ]]; then
+                    continue # not a file or directory
+                fi
 
                 configs+=("$subconf")
             done
@@ -66,7 +75,7 @@ for conf in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
         fi
     done
 
-	# if not skipped, add to configs array
+    # if not skipped, add to configs array
     if ! $skip; then
         configs+=("$conf")
     fi
@@ -74,12 +83,12 @@ done
 
 # show numbered list
 echo
-echo "Available configs that can be updated:"
+echo -e "${CYAN}Available configs that can be updated:${NC}"
 echo
 for i in "${!configs[@]}"; do
-	# remove prefix to display to user
-	name="$(basename "${configs[$i]}")"
-    printf "%2d) %s\n" "$((i+1))" "$name"
+    # remove prefix to display to user
+    name="$(basename "${configs[$i]}")"
+    printf "%2d) %s\n" "$((i + 1))" "$name"
 done
 
 # ask user for selection(s)
@@ -89,8 +98,8 @@ echo
 
 # quit option
 if [[ "$selection" =~ ^[Qq]$ ]]; then
-    echo "Exiting script..."
-    echo "$BOTTOM_FAILED_BORDER"
+    echo -e "${RED}Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
     exit 0
 fi
 
@@ -100,17 +109,17 @@ if [[ "$selection" =~ ^[Aa]$ ]]; then
     selected=("${configs[@]}")
 else
     for num in $selection; do
-        if [[ "$num" =~ ^[0-9]+$ ]] && (( num >= 1 && num <= ${#configs[@]} )); then
-            selected+=("${configs[$((num-1))]}")
+        if [[ "$num" =~ ^[0-9]+$ ]] && ((num >= 1 && num <= ${#configs[@]})); then
+            selected+=("${configs[$((num - 1))]}")
         else
-            echo "Invalid selection: $num"
+            echo -e "${RED}Invalid selection: $num${NC}"
         fi
     done
 fi
 
 if [[ ${#selected[@]} -eq 0 ]]; then
-    echo "No configs selected. Exiting script..."
-    echo "$BOTTOM_FAILED_BORDER"
+    echo -e "${RED}No configs selected. Exiting script...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
     exit 1
 fi
 
@@ -148,9 +157,9 @@ check_diff() {
     while true; do
         read -r -p "Difference found between the repo's $name config and your current config. Update repo? (y/n): " input
         case "$input" in
-            [Yy]) return 0 ;;   # apply
-            [Nn]) return 2 ;;   # answered no, skip
-            *) echo "Please answer y or n." ;;
+        [Yy]) return 0 ;; # apply
+        [Nn]) return 2 ;; # answered no, skip
+        *) echo -e "${YELLOW}Please answer y or n.${NC}" ;;
         esac
     done
 }
@@ -160,45 +169,44 @@ for target_conf in "${selected[@]}"; do
     name="$(basename "$target_conf")"
 
     # check diff
-	echo "Checking differences in $name config..."
-	check_diff "$src_conf" "$target_conf" "$name"
-	case $? in
-		0)
-			# apply config
-			;;
-		1)
-			echo "Skipping $name config, no differences found between $target_conf and $src_conf..."
-			echo
-			continue
-			;;
-		2)
-			echo "Skipping $name config..."
-			echo
-			continue
-			;;
-	esac
+    echo -e "${BLUE}Checking differences in $name config...${NC}"
+    check_diff "$src_conf" "$target_conf" "$name"
+    case $? in
+    0)
+        # apply config
+        ;;
+    1)
+        echo -e "${YELLOW}Skipping $name config, no differences found between $target_conf and $src_conf...${NC}"
+        echo
+        continue
+        ;;
+    2)
+        echo -e "${YELLOW}Skipping $name config...${NC}"
+        echo
+        continue
+        ;;
+    esac
 
     # reach here on a 0 return of check_diff
     if [[ -d "$src_conf" ]]; then
-        echo "Updating $name config..."
+        echo -e "${BLUE}Updating $name config...${NC}"
         # mkdir not really needed as the dir has to exist to get here, but just in case...
         mkdir -p "$target_conf"
 
-		# check for exclude file
-		exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
-	    if [[ -f "$exclude_file" ]]; then
-			rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
-	    else
-	    	rsync -a --delete "$src_conf"/ "$target_conf"/
-	    fi
-        echo "Updated $name config!"
+        # check for exclude file
+        exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+        if [[ -f "$exclude_file" ]]; then
+            rsync -a --delete --exclude-from="$exclude_file" "$src_conf"/ "$target_conf"/
+        else
+            rsync -a --delete "$src_conf"/ "$target_conf"/
+        fi
+        echo -e "${GREEN}Updated $name config!${NC}"
 
     elif [[ -f "$src_conf" ]]; then
-        echo "Updating $name config..."
+        echo -e "${BLUE}Updating $name config...${NC}"
         cp -f "$src_conf" "$target_conf"
-        echo "Updated $name config!"
+        echo -e "${GREEN}Updated $name config!${NC}"
     fi
 done
 
-echo "$BOTTOM_SUCCESSFUL_BORDER"
-
+echo -e "$BOTTOM_SUCCESSFUL_BORDER"
