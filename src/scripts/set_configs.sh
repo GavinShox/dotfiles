@@ -40,7 +40,7 @@ get_target_conf() {
 echo -e "$TOP_BORDER"
 read -r -p "Existing config files will be overwritten, but you will get the option to make backups. Continue? (y/n): " input
 if [[ ! $input =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Exiting script...${NC}"
+    echo -e "${RED}Stopping script...${NC}"
     echo -e "$BOTTOM_FAILED_BORDER"
     exit 1
 fi
@@ -113,7 +113,7 @@ echo
 
 # quit option
 if [[ "$selection" =~ ^[Qq]$ ]]; then
-    echo -e "${RED}Exiting script...${NC}"
+    echo -e "${RED}Stopping script...${NC}"
     echo -e "$BOTTOM_FAILED_BORDER"
     exit 0
 fi
@@ -133,7 +133,7 @@ else
 fi
 
 if [[ ${#selected[@]} -eq 0 ]]; then
-    echo -e "${RED}No configs selected. Exiting script...${NC}"
+    echo -e "${RED}No configs selected. Stopping script...${NC}"
     echo -e "$BOTTOM_FAILED_BORDER"
     exit 1
 fi

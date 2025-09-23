@@ -48,7 +48,7 @@ while true; do
     echo
 
     if [[ "$input" =~ ^[Qq]$ ]]; then
-        echo -e "${RED}Exiting...${NC}"
+        echo -e "${RED}Stopping script...${NC}"
         echo -e "$BOTTOM_FAILED_BORDER"
         exit 0
     elif [[ "$input" =~ ^[0-9]+$ ]] && ((input >= 1 && input <= ${#DISPLAY_NAMES[@]})); then
