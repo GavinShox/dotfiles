@@ -129,37 +129,51 @@ check_diff() {
     local target="$2"
     local name="$3"
 
-    # pick diff command depending on support for --color
-    # then check $target type, use recursive flag if its a dir
-    local diff_cmd
-    if diff --help 2>&1 | grep -q -- '--color'; then
-        if [[ -d "$target" ]]; then
-            diff_cmd=(diff --color=auto -r "$target" "$src")
-        else
-            diff_cmd=(diff --color=auto "$target" "$src")
-        fi
-    else
-        if [[ -d "$target" ]]; then
-            diff_cmd=(diff -r "$target" "$src")
-        else
-            diff_cmd=(diff "$target" "$src")
-        fi
+    local exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+    local exclude_args=()
+
+    # find exclude args if an exclude file exists, as those files/dirs won't be copied in the rsync
+    if [[ -f "$exclude_file" ]]; then
+        while IFS= read -r pattern; do
+            [[ -n "$pattern" ]] || continue
+            exclude_args+=(-not -path "$src/$pattern" -not -path "$target/$pattern")
+        done < "$exclude_file"
     fi
 
-    # return 1 if no diff
-    if "${diff_cmd[@]}" >/dev/null 2>&1; then
-        # No differences found, skip
+    local has_diff=false
+
+    # walk all files in $src and compare with $target
+    while IFS= read -r file; do
+        rel="${file#$src/}"  # relative path
+        src_file="$src/$rel"
+        target_file="$target/$rel"
+
+        if [[ -f "$target_file" ]]; then
+            if ! diff "$target_file" "$src_file" >/dev/null 2>&1; then
+                has_diff=true
+                echo "Diff for $rel:"
+                # pick diff based on support for --color flag
+                if diff --help 2>&1 | grep -q -- '--color'; then
+                    diff --color=auto "$target_file" "$src_file"
+                else
+                    diff "$target_file" "$src_file"
+                fi
+                echo
+            fi
+        fi
+    done < <(find "$src" -type f "${exclude_args[@]}")
+
+    if [[ "$has_diff" == false ]]; then
+         # no differences found, skip
         return 1
     fi
-
-    # differences found, show them and prompt
-    "${diff_cmd[@]}"
+    # differences found (echoed in above while loop above) so prompt
     while true; do
-        read -r -p "Difference found between the repo's $name config and your current config. Update repo? (y/n): " input
+        read -r -p "Differences found in $name config. Update repo? (y/n): " input
         case "$input" in
-        [Yy]) return 0 ;; # apply
-        [Nn]) return 2 ;; # answered no, skip
-        *) echo -e "${YELLOW}Please answer y or n.${NC}" ;;
+            [Yy]) return 0 ;;
+            [Nn]) return 2 ;;
+            *) echo -e "${YELLOW}Please answer y or n.${NC}" ;;
         esac
     done
 }
