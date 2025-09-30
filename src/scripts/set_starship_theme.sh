@@ -34,7 +34,7 @@ done
 echo -e "$TOP_BORDER"
 
 while true; do
-    echo "Available themes:"
+    echo -e "${CYAN}Available themes:${NC}"
     echo
 
     for i in "${!DISPLAY_NAMES[@]}"; do
