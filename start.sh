@@ -45,7 +45,7 @@ echo -e "$TOP_BORDER"
 
 # allow for multiple scripts to be run in succession without re-launching the script
 while true; do
-    echo -e "${CYAN}Available scripts:${NC}"
+    echo "Available scripts:"
     echo
 
     for i in "${!DISPLAY_NAMES[@]}"; do

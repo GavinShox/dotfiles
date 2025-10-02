@@ -98,7 +98,7 @@ done
 
 # show numbered list
 echo
-echo -e "${CYAN}Available configs:${NC}"
+echo "Available configs:"
 echo
 for i in "${!configs[@]}"; do
     # remove prefix to display to user
@@ -108,7 +108,8 @@ done
 
 # ask user for selection(s)
 echo
-read -r -p "Enter numbers separated by spaces (e.g. 1 3 5) or 'a' for all ('q' to quit): " selection
+echo -e "${YELLOW}Enter numbers separated by spaces (e.g. 1 3 5) or 'a' for all ('q' to quit):${NC}"
+read -r -p "" selection
 echo
 
 # quit option

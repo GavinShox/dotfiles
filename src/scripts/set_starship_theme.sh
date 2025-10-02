@@ -34,7 +34,7 @@ done
 echo -e "$TOP_BORDER"
 
 while true; do
-    echo -e "${CYAN}Available themes:${NC}"
+    echo "Available themes:"
     echo
 
     for i in "${!DISPLAY_NAMES[@]}"; do
@@ -43,7 +43,6 @@ while true; do
 
     echo
     echo -e "${YELLOW}Press number to apply a theme, or 'q' to quit.${NC}"
-
     read -r -p "" input
     echo
 
