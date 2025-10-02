@@ -50,7 +50,7 @@ background-blur = true
 
 window-padding-x = 15
 window-padding-y = 15
-window-width = 130
+window-width = 125
 window-height = 35
 
 cursor-style = "bar"
