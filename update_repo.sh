@@ -124,57 +124,101 @@ if [[ ${#selected[@]} -eq 0 ]]; then
     exit 1
 fi
 
-# function to check for differences and prompt user, 0: save, 1: skip, 2: answered no, skip
+# check_diff(src = user path, target = repo path, name = short name)
+# return codes: 0 = apply (user wants to update repo), 1 = no-diff (skip),
+#               2 = user declined (skip)
 check_diff() {
     local src="$1"
     local target="$2"
     local name="$3"
 
-    local exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
-    local exclude_args=()
+    # quick sanity check
+    [[ -d "$src" || -f "$src" ]] || return 1
+    [[ -d "$target" || -f "$target" ]] || return 1
 
-    # find exclude args if an exclude file exists, as those files/dirs won't be copied in the rsync
+    # find an exclude file
+    local exclude_file="$EXCLUDE_DIR/$name$EXCLUDE_FILE_SUFFIX"
+    local rsync_args=( -rcn --delete -i )    # -r recursive, -c checksum (safer), -n dry-run, -i itemize
     if [[ -f "$exclude_file" ]]; then
-        while IFS= read -r pattern; do
-            [[ -n "$pattern" ]] || continue
-            exclude_args+=(-not -path "$src/$pattern" -not -path "$target/$pattern")
-        done < "$exclude_file"
+        rsync_args+=( --exclude-from="$exclude_file" )
+    fi
+
+    # run rsync dry-run and capture output lines
+    local -a changes
+    mapfile -t changes < <( rsync "${rsync_args[@]}" -- "$src"/ "$target"/ 2>/dev/null )
+
+    # no changes -> nothing to do
+    if (( ${#changes[@]} == 0 )); then
+        return 1
     fi
 
     local has_diff=false
 
-    # walk all files in $src and compare with $target
-    while IFS= read -r file; do
-        rel="${file#$src/}"  # relative path
-        src_file="$src/$rel"
-        target_file="$target/$rel"
+    # detect if diff(1) supports --color
+    local diff_color_supported=false
+    if diff --help 2>&1 | grep -q -- '--color'; then
+        diff_color_supported=true
+    fi
 
-        if [[ -f "$target_file" ]]; then
-            if ! diff "$target_file" "$src_file" >/dev/null 2>&1; then
+    # process rsync itemized output
+    # rsync -i lines have two canonical forms we handle:
+    #  - "deleting <path>"                      -> file exists in target (repo) but not in src (user)
+    #  - "<flags> <path>" where flags begin with '>' for a transfer from src->dest
+    # we treat '>' entries as "user has it (new or changed)"; if repo file exists -> show diff, else "Only in user" (like 'diff')
+    local line flags path
+    for line in "${changes[@]}"; do
+        # skip empty lines
+        [[ -z "${line//[[:space:]]/}" ]] && continue
+
+        if [[ "$line" =~ ^deleting[[:space:]]+(.+) ]]; then
+            path="${BASH_REMATCH[1]}"
+            echo "Only in repo ($target): $path"
+            has_diff=true
+            continue
+        fi
+
+        # split into flags and path; flags are the first token
+        flags="${line%% *}"
+        # path is remainder after the first space
+        path="${line#"$flags "}"
+
+        # only care about actions where rsync would send something from src -> target: flags starting with '>'
+        if [[ "${flags:0:1}" == '>' ]]; then
+            # path may be a directory (ends with /) or file
+            # if corresponding repo file exists => show diff
+            if [[ -f "$target/$path" ]]; then
                 has_diff=true
-                echo "Diff for $rel:"
-                # pick diff based on support for --color flag
-                if diff --help 2>&1 | grep -q -- '--color'; then
-                    diff --color=auto "$target_file" "$src_file"
+                echo "Diff for $path:"
+                if $diff_color_supported; then
+                    diff --color=auto "$target/$path" "$src/$path" || true
                 else
-                    diff "$target_file" "$src_file"
+                    diff "$target/$path" "$src/$path" || true
                 fi
                 echo
+            else
+                # repo does not have it => new file in user
+                has_diff=true
+                echo "Only in user ($src): $path"
             fi
+        else
+            # other itemized flags (e.g. changed dir metadata) — treat as a change and print the raw line
+            has_diff=true
+            echo "Change: $line"
         fi
-    done < <(find "$src" -type f "${exclude_args[@]}")
+    done
 
+    # final guard: if we detected no diffs somehow
     if [[ "$has_diff" == false ]]; then
-         # no differences found, skip
         return 1
     fi
-    # differences found (echoed in above while loop above) so prompt
+
+    # prompt the user
     while true; do
         read -r -p "Differences found in $name config. Update repo? (y/n): " input
         case "$input" in
             [Yy]) return 0 ;;
             [Nn]) return 2 ;;
-            *) echo -e "${YELLOW}Please answer y or n.${NC}" ;;
+            *) echo "Please answer y or n." ;;
         esac
     done
 }
