@@ -1,5 +1,6 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_SCRIPT="$SCRIPT_DIR/util/install_package.sh"
 
 # colour codes
 RED='\033[0;31m'
@@ -23,17 +24,64 @@ if [[ ! $input =~ ^[Yy]$ ]]; then
 	exit 1
 fi
 
-echo -e "${BLUE}Installing tmux...${NC}"
-sudo dnf install --refresh -y tmux
-echo -e "${BLUE}Cloning tmux plugin manager...${NC}"
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# install dependencies (for loop to keep consistent with other scripts in the future)
+for cmd in git; do
+    if command -v "$cmd" >/dev/null 2>&1; then
+        echo -e "${GREEN}Dependency ($cmd) already installed...${NC}"
+    else
+        echo -e "${BLUE}Missing dependency ($cmd). Attempting to install...${NC}"
+        if sudo "$INSTALL_SCRIPT" "$cmd" >/dev/null 2>&1; then
+            echo -e "${GREEN}Dependency ($cmd) installed!${NC}"
+        else
+            echo -e "${RED}Error: Failed to install $cmd. Exiting...${NC}"
+            echo -e "$BOTTOM_FAILED_BORDER"
+            exit 1
+        fi
+    fi
+done
+
+# tmux install
+if command -v tmux >/dev/null 2>&1; then
+    echo -e "${GREEN}tmux already installed...${NC}"
+else
+    echo -e "${BLUE}Installing tmux...${NC}"
+    if sudo "$INSTALL_SCRIPT" tmux >/dev/null 2>&1; then
+        echo -e "${GREEN}tmux installed!${NC}"
+    else
+        echo -e "${RED}Error: Failed to install tmux. Exiting..."
+        echo -e "$BOTTOM_FAILED_BORDER"
+        exit 1
+    fi
+fi
+
+# install plugin manager
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [[ -d "$TPM_DIR" ]]; then
+    echo -e "${YELLOW}tmux plugin manager already exists at $TPM_DIR. Skipping clone...${NC}"
+else
+    echo -e "${BLUE}Cloning tmux plugin manager...${NC}"
+    if ! git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"; then
+        echo -e "${RED}Error: Failed to clone tmux plugin manager. Exiting...${NC}"
+        echo -e "$BOTTOM_FAILED_BORDER"
+        exit 1
+    fi
+fi
+
+# copy .tmux.conf
 echo -e "${BLUE}Copying tmux configuration...${NC}"
-cp -fb "$SCRIPT_DIR"/../configs/.tmux.conf "$HOME"/.tmux.conf
+if ! cp -fb "$SCRIPT_DIR"/../configs/.tmux.conf "$HOME"/.tmux.conf; then
+    echo -e "${RED}Error: Failed to copy tmux config file. Exiting...${NC}"
+    echo -e "$BOTTOM_FAILED_BORDER"
+    exit 1
+fi
+
+# start tmux server and reload config
 echo -e "${BLUE}Setting up tmux server...${NC}"
-# launch tmux server to reload conf
-tmux new -d
-tmux source "$HOME"/.tmux.conf
-tmux kill-server
+if tmux new -d; then
+    tmux source "$HOME"/.tmux.conf || echo -e "${YELLOW}Warning: Could not source .tmux.conf.${NC}"
+    tmux kill-server || true
+fi
+
 echo -e "${GREEN}.tmux.conf backup made at ${HOME}/.tmux.conf~${NC}"
-echo -e "${GREEN}Config complete! Launch tmux and press 'prefix (Ctrl+s) + I' to install plugins${NC}"
+echo -e "${GREEN}Config complete! Launch tmux and press 'prefix (Ctrl+s) + I' to install required plugins.${NC}"
 echo -e "$BOTTOM_SUCCESSFUL_BORDER"
