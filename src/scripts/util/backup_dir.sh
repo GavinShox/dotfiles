@@ -17,7 +17,7 @@ if [[ -d $1 ]]; then
 
 	backup_dir=$1.bak$i
 	cp -r $1 $backup_dir
-	echo -e "${GREEN}Backup of directory ${1} made at ${backup_dir}${NC}"
+	echo -e "${CYAN}Backup of directory ${1} made at ${backup_dir}${NC}"
 else
 	echo -e "${YELLOW}Directory ($1) doesn't exist, nothing to backup${NC}"
 fi

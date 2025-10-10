@@ -25,4 +25,4 @@ else
 fi
 
 cp $1 $backup_file
-echo -e "${GREEN}Backup of file ${1} made at ${backup_file}${NC}"
+echo -e "${CYAN}Backup of file ${1} made at ${backup_file}${NC}"

@@ -209,7 +209,7 @@ for src_conf in "${selected[@]}"; do
     # handle config file
     elif [[ -f "$src_conf" ]]; then
         if [[ "$backup" == true ]]; then
-            echo -e "${PURPLE}Backing up $name config...${NC}"
+            echo -e "${CYAN}Backing up $name config...${NC}"
             "$SCRIPT_DIR"/util/backup_file.sh "$target_conf"
         fi
 
@@ -224,7 +224,6 @@ for src_conf in "${selected[@]}"; do
         bash "$post_install_script"
         echo -e "${GREEN}Post-install script complete!${NC}"
     fi
-    echo
 done
 
 echo -e "$BOTTOM_SUCCESSFUL_BORDER"
