@@ -190,7 +190,7 @@ for src_conf in "${selected[@]}"; do
     # handle config directory
     if [[ -d "$src_conf" ]]; then
         if [[ "$backup" == true ]]; then
-            echo -e "${PURPLE}Backing up $name config...${NC}"
+            echo -e "${CYAN}Backing up $name config...${NC}"
             "$SCRIPT_DIR"/util/backup_dir.sh "$target_conf"
         fi
 
