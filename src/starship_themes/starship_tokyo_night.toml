@@ -80,6 +80,9 @@ read_only = "󰌾 "
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
+"Videos" = " "
+"Projects" = "󰲋 "
+"Games" = "󰊴 "
 
 [git_branch]
 symbol = ""

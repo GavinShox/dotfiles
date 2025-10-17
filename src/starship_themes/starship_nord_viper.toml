@@ -112,6 +112,9 @@ read_only = "󰌾 "
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
+"Videos" = " "
+"Projects" = "󰲋 "
+"Games" = "󰊴 "
 
 [c]
 symbol = " "
