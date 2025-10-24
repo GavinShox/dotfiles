@@ -97,13 +97,13 @@ truncation_symbol = "…/"
 read_only = "󰌾 "
 
 [directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Videos" = " "
-"Projects" = "󰲋 "
-"Games" = "󰊴 "
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+"Videos" = ""
+"Projects" = "󰲋"
+"Games" = "󰊴"
 
 [git_branch]
 symbol = ""
