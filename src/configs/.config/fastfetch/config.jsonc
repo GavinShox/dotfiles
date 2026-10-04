@@ -107,7 +107,6 @@
     {
     "type": "sound",
     "key": " AUDIO",
-    "format": "{2}",
     "keyColor": "magenta"
     },
     {
